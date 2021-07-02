@@ -1,9 +1,9 @@
 #ifndef Lctrl_MoteurTOR_h
 #define Lctrl_MoteurTOR_h
 
-#include <Arduino.h>
+#include <Lctrl_Moteur\LctrlMoteur.h>
 
-class Lctrl_MoteurTOR
+class Lctrl_MoteurTOR  : public LctrlMoteur
 {
 public:
     // Enumération  mode de fonctionnement moteur
@@ -27,32 +27,8 @@ public:
         @param inverted inversion des sorties logique ex : avec des relais
     */
     /**************************************************************************/
-    Lctrl_MoteurTOR(uint8_t pinAv, uint8_t pinAr = -1, boolean inverted = false);
+    Lctrl_MoteurTOR(unsigned char pinAv, unsigned char pinAr = -1, unsigned char mode = Mode_auto, bool inverted = false);
     
-    /**************************************************************************/
-    /*!
-        @brief  Bit de commande marche avant.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        
-        @param  FALSE > moteur à l'arrêt
-        @param  TRUE  > marche avant
-    */
-    /**************************************************************************/
-    boolean cmdAv;
-
-    /**************************************************************************/
-    /*!
-        @brief  Bit de commande marche arrière.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        
-        @param  FALSE > moteur à l'arrêt
-        @param  TRUE  > marche arrière
-    */
-    /**************************************************************************/
-    boolean cmdAr;
-
     /**************************************************************************/
     /*!
         @brief  etat du moteur.        
@@ -61,47 +37,16 @@ public:
           
     */
     /**************************************************************************/
-    boolean isRunning(void) const{return m_KmAv || m_KmAr;}
+    bool isRunning(void) const{return m_KmAv || m_KmAr;}
     
-    /**************************************************************************/
-    /*!
-        @brief  Mode de fontionnement du moteur.
-        @param Lctrl_MoteurPWM::ModeMoteur
-        @param 0 Arrêt forcé
-        @param 1 Forçage marche avant
-        @param 2 Forçage marche arrière
-        @param 3 Mode Auto (cmdAv, cmdAr)
-        @param 4 Défaut
-    */
-    /**************************************************************************/
-    uint8_t modeFct;
-    
-    /**************************************************************************/
-    /*!
-        @brief  Fonction principale.
-        Execution à chaque tours de loop
-    */
-    /**************************************************************************/
-    void main(void);
-    void setup(void);
-
-    /**************************************************************************/
-    /*!
-        @brief  Changement d'état moteur en mode auto
-        changement du sens de rotation avec passage à l'arrêt commutant
-    */
-    /**************************************************************************/
-    void toggle(void);
+    void main(void) override;
+    void setup(void) override;
     
 private:
-    boolean m_memCmd;
-    boolean m_KmAv;
-    boolean m_KmAr;
-    boolean m_inverted;
+    bool m2sens() const override {return m_pinAr != 255;}
+    bool m_inverted;
     
-    uint8_t m_pinAv;
-    uint8_t m_pinAr;
-    
+    unsigned char m_pinAr;
 };
 
 #endif

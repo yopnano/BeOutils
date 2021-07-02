@@ -1,7 +1,6 @@
 #ifndef Lctrl_MoteurPWM_h
 #define Lctrl_MoteurPWM_h
 
-#include <Arduino.h>
 #include <Lctrl_Moteur\LctrlMoteur.h>
 
 class Lctrl_MoteurPWM : public LctrlMoteur
@@ -21,7 +20,7 @@ public:
         @param rampeAcc temps en milliseconde changement vitesse Defaut 0
     */
     /**************************************************************************/
-    Lctrl_MoteurPWM(uint8_t pinAv, uint8_t pinAr = 0, uint8_t mode = Mode_auto, uint8_t csgMin = 0, uint8_t csgMax = 0, uint8_t rampeAcc = 0);
+    Lctrl_MoteurPWM(unsigned char pinAv, unsigned char pinAr = 0, unsigned char mode = Mode_auto, unsigned char csgMin = 0, unsigned char csgMax = 0, unsigned char rampeAcc = 0);
 
     /**************************************************************************/
     /*!
@@ -31,16 +30,18 @@ public:
           
     */
     /**************************************************************************/
-    boolean isRunning(void) const{return (m_KmAv || m_KmAr);}
+    bool isRunning(void) const{return (m_KmAv || m_KmAr);}
 
     void main(void) override;
     void setup(void) override;
     
-    bool m2sens() const override {return m_pinAr != 255;}
 
 private:
     LMoteurSpeed m_speed;
-    uint8_t m_pinAr;
+    
+    bool m2sens() const override {return m_pinAr != 255;}
+    
+    unsigned char m_pinAr;
 };
 
 #endif

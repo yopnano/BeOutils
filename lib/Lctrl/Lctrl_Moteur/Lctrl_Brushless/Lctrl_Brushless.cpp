@@ -4,7 +4,7 @@
     brushless 1 sens de rotation
 */
 
-Lctrl_Brushless_1sens::Lctrl_Brushless_1sens(uint8_t pin, uint8_t mode, uint8_t rampeAcc, uint16_t dtMin, uint16_t dtMax):
+Lctrl_Brushless_1sens::Lctrl_Brushless_1sens(unsigned char pin, unsigned char mode, unsigned char rampeAcc, unsigned short dtMin, unsigned short dtMax):
     LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
     m_dtMin(dtMin),
     m_dtMax(dtMax)
@@ -47,7 +47,7 @@ void Lctrl_Brushless_1sens::main(void)
     KM();
 
     //Calcul de la consigne en microsecondes
-    uint16_t csgMicroseconds;
+    unsigned short csgMicroseconds;
     if(m_KmAv) csgMicroseconds = map(m_csgActuelle, m_csgMin, m_csgMax, m_dtMin, m_dtMax);
     if((!m_KmAv) |! m_initialized) csgMicroseconds = m_dtMin;
 
@@ -60,7 +60,7 @@ void Lctrl_Brushless_1sens::main(void)
     brushless 2 sens de rotation
 */
 
-Lctrl_Brushless_2sens::Lctrl_Brushless_2sens(uint8_t pin, uint8_t mode, uint8_t rampeAcc, uint16_t dtMin, uint16_t dtMid, uint16_t dtMax):
+Lctrl_Brushless_2sens::Lctrl_Brushless_2sens(unsigned char pin, unsigned char mode, unsigned char rampeAcc, unsigned short dtMin, unsigned short dtMid, unsigned short dtMax):
     LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
     m_dtMin(dtMin),
     m_dtMid(dtMid),
@@ -106,7 +106,7 @@ void Lctrl_Brushless_2sens::main(void)
     KM();
 
     //Calcul de la consigne en microsecondes
-    uint16_t csgMicroseconds;
+    unsigned short csgMicroseconds;
     if(m_KmAv) csgMicroseconds = map(m_csgActuelle, m_csgMin, m_csgMax, m_dtMid, m_dtMax);
     if(m_KmAr) csgMicroseconds = map(m_csgActuelle, m_csgMin, m_csgMax, m_dtMid, m_dtMin);
     if((!m_KmAv &! m_KmAr) |! m_initialized) csgMicroseconds = m_dtMid;
