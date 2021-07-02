@@ -23,10 +23,10 @@
 
 //Lctrl_Moteur
 #include <Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
-#include <Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.cpp>
-#include <Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.cpp>
+#include <Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
+#include <Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
 //#include <Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.cpp>
-//#include <Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.cpp>
+#include <Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
 
 //Lcom
 #include <Lcom_433MHz\Lcom_433MHz.cpp>

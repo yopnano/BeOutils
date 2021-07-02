@@ -20,15 +20,6 @@ void Lctrl_MoteurPWM::setup(void)
     else pinMode(m_pinAr, OUTPUT);
 }
 
-void Lctrl_MoteurPWM::release(void)
-{   //Methode pour relâcher le moteur
-    m_cmdAr = false;
-    m_cmdAv = false;
-    m_KmAv = false;
-    m_KmAr = false;
-}
-
-
 void Lctrl_MoteurPWM::main(void)
 {   //Fonction principale moteur
     

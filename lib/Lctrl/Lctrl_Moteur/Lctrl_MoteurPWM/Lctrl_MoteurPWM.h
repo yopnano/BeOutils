@@ -25,41 +25,6 @@ public:
 
     /**************************************************************************/
     /*!
-        @brief  Bit de commande marche avant.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        
-        @param  FALSE > moteur à l'arrêt
-        @param  TRUE  > marche avant à la consigne auto
-    */
-    /**************************************************************************/
-
-    
-    /**************************************************************************/
-    /*!
-        @brief  Bit de commande marche arrière.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        
-        @param  FALSE > moteur à l'arrêt
-        @param  TRUE  > marche arrière à la consigne auto
-    */
-    /**************************************************************************/
-
-    void stop(void) {m_cmdAv = false; m_cmdAr = false;}
-
-    /**************************************************************************/
-    /*!
-        @brief  Bit d'arret immédiat du moteur.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        Arrête le moteur snas phase de décélération
-    */
-    /**************************************************************************/
-    void release(void);
-
-    /**************************************************************************/
-    /*!
         @brief  etat du moteur.        
         @param FALSE moteur à l'arrêt
         @param TRUE moteur en fonctionnement
@@ -68,46 +33,9 @@ public:
     /**************************************************************************/
     boolean isRunning(void) const{return (m_KmAv || m_KmAr);}
 
-
-    /**************************************************************************/
-    /*!
-        @brief  Consigne de départ et d'arrêt moteur.
-        Accélération de csgMini à csgAuto.
-        Décélération de csgAuto à csgMini
-        @param 0~255 vitesse mini ~ maxi
-    */
-    /**************************************************************************/
-    //uint8_t csgMini; // faire en sorte de le dégager sinon le renommer en csgDemarrage
-
-    /**************************************************************************/
-    /*!
-        @brief  Consigne envoyée au moteur
-        @return 0~255 vitesse mini ~ maxi
-    */
-    /**************************************************************************/
- 
-    /**************************************************************************/
-    /*!
-        @brief  Consigne moteur atteinte
-        @return true si la consigne actuelle à atteint la consigne de départ
-    */
-    /**************************************************************************/
-
-    /**************************************************************************/
-    /*!
-        @brief  Fonction principale.
-        Execution à chaque tours de loop
-    */
-    /**************************************************************************/
     void main(void) override;
     void setup(void) override;
     
-    /**************************************************************************/
-    /*!
-        @brief  Changement d'état moteur en mode auto
-        changement du sens de rotation avec passage à l'arrêt commutant
-    */
-    /**************************************************************************/
     bool m2sens() const override {return m_pinAr != 255;}
 
 private:
