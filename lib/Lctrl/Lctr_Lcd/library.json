@@ -1,0 +1,22 @@
+{
+    "name": "Lctrl_Lcd",
+    "version": "0.0.1",
+    "description": "More function to control a lcd display",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/yopnano/Lctrl_Lcd.git"
+    },
+    "authors":
+    [
+      {
+        "name": "yann herledan",
+        "email": "yannherledan1@gmail.com"
+      }
+    ],
+    "dependencies": {
+      "marcoschwartz/LiquidCrystal_I2C": "~1.1.4"
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }

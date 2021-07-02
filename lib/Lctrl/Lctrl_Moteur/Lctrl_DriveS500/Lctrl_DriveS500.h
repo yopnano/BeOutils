@@ -1,36 +1,41 @@
-#ifndef Lctrl_MoteurPWM_h
-#define Lctrl_MoteurPWM_h
+#ifndef Lctrl_DriveS500_h
+#define Lctrl_DriveS500_h
 
 #include <Arduino.h>
-#include <Lsys_Fimpulse\Lsys_Fimpulse.h>
+#include <Lctrl_Moteur\LctrlMoteur.h>
 
-class Lctrl_MoteurPWM
+class Lctrl_DriveS500 : public LctrlMoteur
 {
 public:
     // Enumération  mode de fonctionnement moteur
-    enum ModeMoteur
-        {
-            Arret_forcee,
-            Marche_AV_forcee,
-            Marche_AR_forcee,
-            Mode_auto,
-            Defaut
-        };
+    enum Mode
+    {
+        Arret_forcee,
+        Marche_AV_forcee,
+        Marche_AR_forcee,
+        Mode_auto_Ana,
+        Defaut,
+        Mode_auto_Tor
+    };
+
     /**************************************************************************/
     /*!
-        @brief  Contrôle moteur par signal pwm
+        @brief  Contrôle moteur par variateur de fréquence type S500
 
         Mettre cmdAv ou cmdAr à true et appliquer une vitesse de consigne (0 - 255).
         Acceleration / Deceleration automatique parametrable ainsi qu'une consigne mini
-        @see Lctrl_MotreurTOR
 
-        @param pinAv n° broche pour marche avant
-        @param pinAr n° broche pour marche arrière (-1 pour disable) Défaut désactivé
+        @param pinReady n° broche variateur prêt
+        @param pinRun n° broche moteur run
+        @param pinStf n° broche marche avant
+        @param pinStr n° broche marche arrière
+        @param pinSpeed n° broche commande de vitesse (TOR / ANA) configurer le variateur en fonction
+    
         @param vitesseMini consigne de vitesse de démarrage et d'arrêt moteur Defaut 0
         @param rampeAcc temps en milliseconde changement vitesse Defaut 0
     */
     /**************************************************************************/
-    Lctrl_MoteurPWM(uint8_t pinAv, uint8_t pinAr = -1, uint8_t vitesseMini = 0, uint16_t rampeAcc = 0);
+    Lctrl_DriveS500(uint8_t pinReady = -1, uint8_t pinRun = -1, uint8_t pinStf = -1, uint8_t pinStr = -1, uint8_t pinSpeed = -1, uint8_t mode = Mode_auto_Ana, uint8_t rampeAcc = 0);
 
     /**************************************************************************/
     /*!
@@ -42,8 +47,7 @@ public:
         @param  TRUE  > marche avant à la consigne auto
     */
     /**************************************************************************/
-    boolean cmdAv;
-    void setCmdAv(void) {cmdAr = false; cmdAv = true;}
+
     
     /**************************************************************************/
     /*!
@@ -55,23 +59,8 @@ public:
         @param  TRUE  > marche arrière à la consigne auto
     */
     /**************************************************************************/
-    boolean cmdAr;
-    void setCmdAr(void) {cmdAv = false; cmdAr = true;}
 
-    void stop(void) {cmdAv = false; cmdAr = false;}
-
-    /**************************************************************************/
-    /*!
-        @brief  Bit pour contrôle par fonction PID.
-        
-        Condition moteur en mode auto modeFct = Mode_auto
-        Désactivation des phases d'accélération / décélération uniquement lors d'un changement de consigne
-
-        @param  FALSE > Rampes d'accélération / décélération toujours actives
-        @param  TRUE  > Rampes uniquement pour démarrage et arrêt moteur
-    */
-    /**************************************************************************/
-    boolean pidMode;
+    void stop(void) {m_cmdAv = false; m_cmdAr = false;}
 
     /**************************************************************************/
     /*!
@@ -91,37 +80,8 @@ public:
           
     */
     /**************************************************************************/
-    boolean isRunning(void) const{return (m_sensHor || m_sensTri) && m_csgActuelle > 0;}
+    boolean isRunning(void) const{ return pinIsEnable(m_pinRun) ? digitalRead(m_pinRun) == LOW : (m_KmAv || m_KmAr);}
 
-
-    /**************************************************************************/
-    /*!
-        @brief  Mode de fontionnement du moteur.
-        @param Lctrl_MoteurPWM::ModeMoteur
-        @param 0 Arrêt forcé
-        @param 1 Forçage marche avant (consigne manu)
-        @param 2 Forçage marche arrière (consigne manu)
-        @param 3 Mode Auto (cmdAv, cmdAr, consigne auto)
-        @param 4 Défaut
-    */
-    /**************************************************************************/
-    uint8_t modeFct; 
-
-    /**************************************************************************/
-    /*!
-        @brief  Consigne moteur en mode automatique.
-        @param 0~255 vitesse mini ~ maxi
-    */
-    /**************************************************************************/
-    uint8_t csgAuto;
-    
-    /**************************************************************************/
-    /*!
-        @brief  Consigne moteur en mode forçage.
-        @param 0~255 vitesse mini ~ maxi
-    */
-    /**************************************************************************/
-    uint8_t csgManu;
 
     /**************************************************************************/
     /*!
@@ -131,7 +91,7 @@ public:
         @param 0~255 vitesse mini ~ maxi
     */
     /**************************************************************************/
-    uint8_t csgMini;
+    //uint8_t csgMini; // faire en sorte de le dégager sinon le renommer en csgDemarrage
 
     /**************************************************************************/
     /*!
@@ -139,15 +99,13 @@ public:
         @return 0~255 vitesse mini ~ maxi
     */
     /**************************************************************************/
-    uint8_t csgActuelle(void) const {return m_csgActuelle;}
-
+ 
     /**************************************************************************/
     /*!
         @brief  Consigne moteur atteinte
         @return true si la consigne actuelle à atteint la consigne de départ
     */
     /**************************************************************************/
-    uint8_t csgAtteinte(void) const {return m_csgAtteinte;}
 
     /**************************************************************************/
     /*!
@@ -155,36 +113,31 @@ public:
         Execution à chaque tours de loop
     */
     /**************************************************************************/
-    void main(void);
-    void setup(void);
-    
+    void main(void) override;
+    void setup(void) override;
+    bool rearm() {return m_rearm(m_ready);}
+    bool isReady(void) {m_ready = digitalRead(m_pinRdy) || pinIsDisable(m_pinRdy); return m_ready;}
+
     /**************************************************************************/
     /*!
         @brief  Changement d'état moteur en mode auto
         changement du sens de rotation avec passage à l'arrêt commutant
     */
     /**************************************************************************/
-    void toggle(void);
-    
+    bool m2sens() const override {return pinIsEnable(m_pinStr);}
 
 private:
-    boolean m_memCmd;
-    boolean m_sensHor;
-    boolean m_sensTri;
-    boolean m_csgAtteinte;
-    boolean m_demarrage;
+    LMoteurSpeed m_speed;
 
-    uint8_t m_pinAv;
-    uint8_t m_pinAr;
+    boolean m_ready;
+    boolean m_running;
 
-    uint8_t m_csgActuelle;
-    uint8_t m_csgGlobale;
+    uint8_t m_pinRdy;
+    uint8_t m_pinRun;
+    uint8_t m_pinStf;
+    uint8_t m_pinStr;
 
-    uint16_t m_rampe;
-
-    Lsys_Fimpulse iLsys_Fimpulse;
-
-    void accDec(void);
+    void KM(void) override;
 };
 
 #endif

@@ -2,73 +2,91 @@
 #define LctrlMoteur_h
 
 #include <Arduino.h>
+#include <Lctrl.h>
 #include <Lsys_Fimpulse\Lsys_Fimpulse.h>
 
-
-class LctrlMoteur
+class LctrlMoteur : public Lctrl
 {
 public:
-    /*! @brief Configuration de l'actionneur
-        @param outMin Limite extrême de l'actionneur 0 en général
-        @param outMax Limite extrême de l'actionneur 255 PWM; 180° Servo ...
-        @param csgMin Consigne mode Auto minimum appliquée à l'actionneur
-        @param csgMin Consigne mode Auto maximum appliquée à l'actionneur
-        @param rampeAcc  Fréquence d'éxécution de la rampe d'accélération, millisecondes
-    */
     LctrlMoteur(uint8_t mode, uint8_t outMin, uint8_t outMax, uint8_t csgMin, uint8_t csgMax, uint8_t rampeAcc);
 
-    //! @brief Configuration de l'actionneur pour pouvoir fonctionner avec un PID externe
-    boolean pidMode = false;
+    void toggle(void);
+    bool stop(void) {m_cmdAv = false; m_cmdAr = false; return m_cmdAv || m_cmdAr;}
+
+    void pidMode(bool enable) {m_pidMode = enable;}
     
-    //! @brief Mode de fonctionnement de l'actionneur coir les énumérations 
-    uint8_t modeFct = 3;
+    void cmdAv(bool enable) {m_cmdAv = enable; if(enable) m_cmdAr = false;}
+    bool cmdAv(void) const {return m_cmdAv;}
+    
+    void cmdAr(bool enable) {m_cmdAr = enable; if(enable) m_cmdAv = false;}
+    bool cmdAR(void) const {return m_cmdAr;}
 
-    /*! @brief Consigne de l'actionneur en mode auto
-        @param valeur devant respecter la plage de consigne min/max (cf. constructeur)
-    */
-    uint8_t csgAuto = 0;
+    void modeFct(uint8_t mode);
+    uint8_t modeFct(void) const {return m_modeFct;}
+    
+    void csgAuto(uint8_t csg);
+    uint8_t csgAuto(void) const {return m_csgAuto;}
 
-    /*! @brief Consigne de l'actionneur en mode manuel
-        @param valeur devant respecter les limites min/max (cf. constructeur)
-    */
-    uint8_t csgManu = 0;
+    void csgManu(uint8_t csg);
+    uint8_t csgManu(void) const {return m_csgManu;}
 
+    // Enumération mode de fonctionnement moteur
+    enum Mode
+    {
+        Arret_forcee,
+        Marche_AV_forcee,
+        Marche_AR_forcee,
+        Mode_auto,
+        Defaut = 4
+    };
+    
 protected:
-    //! @brief Fonction commune aux différent type d'actionneurs
-    void checkAttr(void);
+    virtual void KM(void);
+    virtual bool m2sens() const = 0;
+    
+    bool m_rearm(bool cdtRearm);
+    
+    bool m_pidMode;
+    bool m_cmdAv, m_cmdAr, m_memCmd;
+    bool m_KmAv, m_KmAr;
 
-    //! @brief Fonction commune aux différent type d'actionneurs
-    void mainCommon(void);
-    
-    //! @brief Bit d'impulsion pour changement de vitesse acc/déc
-    boolean pulseRampe(void) {return iLsys_Fimpulse.impulse();}
-    
-    //! @brief = TRUE si la consigne Actuelle est = consigne Globale 
-    boolean m_csgAtteinte = false;
-
-    //! @brief Consigne à atteindre (acc/déc ...)
-    uint8_t m_csgGlobale = 0;
-    
-    //! @brief Consigne envoyée à l'actionneur
-    uint8_t m_csgActuelle = 0;
-    
-    //! @brief Pin de commande de l'actionneur
-    uint8_t m_pin;
-    
-    //! @brief Limite de consigne auto
+    uint8_t m_modeFct;
+    uint8_t m_modeFctOld;
+    uint8_t m_csgAuto, m_csgManu;
+    uint8_t m_csgGlobale, m_csgActuelle;
     uint8_t m_csgMin, m_csgMax;
-
-    uint8_t rampe() const {return m_rampe;}
+    uint8_t m_rampe;
+    uint8_t m_pin;
 
 private:
-
-    //! @brief Limites extrêmes de la sortie (0-255 PWM, 0-180 Servo, etc...)
     uint8_t m_outMin, m_outMax;
-
-    //! @brief Fréquence d'éxécution de la rampe d'accélération, millisecondes
-    uint8_t m_rampe;
-
-    // Instance de la fonction d'impulsion
-    Lsys_Fimpulse iLsys_Fimpulse;
 };
+
+
+
+class LMoteurSpeed
+{
+private:
+    void razTimer() {m_lastMillis = millis();}
+    
+    bool m_disabled;
+    bool m_csgAtteinte;
+
+    unsigned long m_lastMillis;
+
+public:
+    //Constructeur
+    LMoteurSpeed();
+
+    //Accesseurs
+    bool csgAtteinte(void) const {return m_csgAtteinte;}
+
+    //Manipulateur
+    void disable(bool Disable) {m_disabled = Disable;}
+
+    //Méthodes
+    void main(uint8_t &csgGlobale, uint8_t &csgActuelle, unsigned short const& rampe);
+};
+
+
 #endif

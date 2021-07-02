@@ -7,15 +7,6 @@
 class Lctrl_MoteurPWM : public LctrlMoteur
 {
 public:
-    // Enumération  mode de fonctionnement moteur
-    enum ModeMoteur
-        {
-            Arret_forcee,
-            Marche_AV_forcee,
-            Marche_AR_forcee,
-            Mode_auto,
-            Defaut
-        };
     /**************************************************************************/
     /*!
         @brief  Contrôle moteur par signal pwm
@@ -42,8 +33,7 @@ public:
         @param  TRUE  > marche avant à la consigne auto
     */
     /**************************************************************************/
-    boolean cmdAv = false;
-    void setCmdAv(void) {cmdAr = false; cmdAv = true;}
+
     
     /**************************************************************************/
     /*!
@@ -55,10 +45,8 @@ public:
         @param  TRUE  > marche arrière à la consigne auto
     */
     /**************************************************************************/
-    boolean cmdAr = false;
-    void setCmdAr(void) {cmdAv = false; cmdAr = true;}
 
-    void stop(void) {cmdAv = false; cmdAr = false;}
+    void stop(void) {m_cmdAv = false; m_cmdAr = false;}
 
     /**************************************************************************/
     /*!
@@ -78,7 +66,7 @@ public:
           
     */
     /**************************************************************************/
-    boolean isRunning(void) const{return (m_sensHor || m_sensTri);}
+    boolean isRunning(void) const{return (m_KmAv || m_KmAr);}
 
 
     /**************************************************************************/
@@ -97,15 +85,13 @@ public:
         @return 0~255 vitesse mini ~ maxi
     */
     /**************************************************************************/
-    uint8_t csgActuelle(void) const {return m_csgActuelle;}
-
+ 
     /**************************************************************************/
     /*!
         @brief  Consigne moteur atteinte
         @return true si la consigne actuelle à atteint la consigne de départ
     */
     /**************************************************************************/
-    uint8_t csgAtteinte(void) const {return m_csgAtteinte;}
 
     /**************************************************************************/
     /*!
@@ -113,8 +99,8 @@ public:
         Execution à chaque tours de loop
     */
     /**************************************************************************/
-    void main(void);
-    void setup(void);
+    void main(void) override;
+    void setup(void) override;
     
     /**************************************************************************/
     /*!
@@ -122,14 +108,10 @@ public:
         changement du sens de rotation avec passage à l'arrêt commutant
     */
     /**************************************************************************/
-    void toggle(void);
-    
+    bool m2sens() const override {return m_pinAr != 255;}
 
 private:
-    boolean m_memCmd = 0;
-    boolean m_sensHor = 0;
-    boolean m_sensTri = 0;
-
+    LMoteurSpeed m_speed;
     uint8_t m_pinAr;
 };
 

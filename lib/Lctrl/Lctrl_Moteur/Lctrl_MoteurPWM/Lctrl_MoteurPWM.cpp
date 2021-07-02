@@ -18,63 +18,36 @@ void Lctrl_MoteurPWM::setup(void)
     
     if (digitalPinToTimer(m_pinAr) == NOT_ON_TIMER) {Serial.print (F("LctrlMoteurPWM Warning : Pin cmdAr > ")); Serial.print (m_pinAr); Serial.println (F(" isn't PWM"));}
     else pinMode(m_pinAr, OUTPUT);
-    
-    modeFct = Mode_auto;
 }
 
 void Lctrl_MoteurPWM::release(void)
 {   //Methode pour relâcher le moteur
-    cmdAr = false;
-    cmdAv = false;
-    m_sensHor = false;
-    m_sensTri = false;
-}
-
-void Lctrl_MoteurPWM::toggle(void)
-{   //Fonction changement de sens AV -> STOP -> AR -> STOP -> AV ...
-
-    //Moteur à l'arrêt
-    if (!cmdAv && !cmdAr)
-    {
-      cmdAv = !m_memCmd; 
-      cmdAr = m_memCmd; 
-    }
-    //Moteur en marche
-    else if (cmdAv ^ cmdAr)
-    {
-        cmdAv = false; 
-        cmdAr = false; 
-        m_memCmd = !m_memCmd && m_pinAr != 255;
-    }
+    m_cmdAr = false;
+    m_cmdAv = false;
+    m_KmAv = false;
+    m_KmAr = false;
 }
 
 
 void Lctrl_MoteurPWM::main(void)
 {   //Fonction principale moteur
     
-    //Vérifie et corrige les attributs
-    checkAttr();
-
     //Calcul de la consigne en fonction de l'état de marche
-    m_csgGlobale =  (modeFct == Marche_AV_forcee) * csgManu + //Mode manu avant
-                    (modeFct == Marche_AR_forcee) * csgManu + //Mode manu arriere
-                    (modeFct == Mode_auto) * (cmdAv ^ cmdAr) * csgAuto; //Mode auto avant XOR arriere
+    m_csgGlobale =  (m_modeFct == Marche_AV_forcee) * m_csgManu + //Mode manu avant
+                    (m_modeFct == Marche_AR_forcee) * m_csgManu + //Mode manu arriere
+                    (m_modeFct == Mode_auto) * (m_cmdAv ^ m_cmdAr) * m_csgAuto; //Mode auto avant XOR arriere
     
-    //Ajustements consigne
-    mainCommon();
 
-    if (pidMode) m_csgActuelle = m_csgGlobale;
+    //Mode PID
+    m_speed.disable(m_pidMode);
 
     //Si changement de consigne et front rampe => acceleration/deceleration
-    if (!m_csgAtteinte && pulseRampe()) m_csgActuelle += (m_csgGlobale > m_csgActuelle) ? 1 : -1;
+    m_speed.main(m_csgGlobale, m_csgActuelle, m_rampe);
 
-    m_sensHor = (m_csgActuelle > m_csgMin && ((modeFct == Mode_auto && cmdAv) || m_sensHor))
-                || modeFct == Marche_AV_forcee;
-
-    m_sensTri = (m_csgActuelle > m_csgMin && ((modeFct == Mode_auto && cmdAr) || m_sensTri))
-                || modeFct == Marche_AR_forcee;
+    //Gestions KmAv KmAr
+    KM();
 
     //Pilotage des sorties
-    analogWrite(m_pin  , m_csgActuelle * m_sensHor);
-    analogWrite(m_pinAr, m_csgActuelle * m_sensTri); 
+    analogWrite(m_pin  , m_csgActuelle * m_KmAv);
+    analogWrite(m_pinAr, m_csgActuelle * m_KmAr); 
 }
