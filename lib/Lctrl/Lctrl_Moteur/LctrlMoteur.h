@@ -1,13 +1,12 @@
 #ifndef LctrlMoteur_h
 #define LctrlMoteur_h
 
-#include <Arduino.h>
 #include <Lctrl.h>
 
 class LctrlMoteur : public Lctrl
 {
 public:
-    LctrlMoteur(uint8_t mode, uint8_t outMin, uint8_t outMax, uint8_t csgMin, uint8_t csgMax, uint8_t rampeAcc);
+    LctrlMoteur(unsigned char mode, unsigned char outMin, unsigned char outMax, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc);
 
     /// @brief  Changement de sens moteur FW -> STOP -> BW -> STOP -> FW ...
     void toggle(void);
@@ -48,18 +47,18 @@ public:
         Mode de fonctionement automatique = 3
         liste des modes classname::Mode...
     */
-    void modeFct(uint8_t mode);
-    uint8_t modeFct(void) const {return m_modeFct;}
+    void modeFct(unsigned char mode);
+    unsigned char modeFct(void) const {return m_modeFct;}
     
     /// @brief Consigne de vitesse en mode auto de 0 à 255
-    void csgAuto(uint8_t csg);
+    void csgAuto(unsigned char csg);
     /// @return retourne la valeur de consigne
-    uint8_t csgAuto(void) const {return m_csgAuto;}
+    unsigned char csgAuto(void) const {return m_csgAuto;}
 
     /// @brief Consigne de vitesse en mode manuel de 0 à 255
-    void csgManu(uint8_t csg);
+    void csgManu(unsigned char csg);
     /// @return retourne la valeur de consigne
-    uint8_t csgManu(void) const {return m_csgManu;}
+    unsigned char csgManu(void) const {return m_csgManu;}
 
     // Enumération mode de fonctionnement moteur
     enum Mode
@@ -83,16 +82,16 @@ protected:
     bool m_cmdAv, m_cmdAr, m_memCmd;
     bool m_KmAv, m_KmAr;
 
-    uint8_t m_modeFct;
-    uint8_t m_modeFctOld;
-    uint8_t m_csgAuto, m_csgManu;
-    uint8_t m_csgGlobale, m_csgActuelle;
-    uint8_t m_csgMin, m_csgMax;
-    uint8_t m_rampe;
-    uint8_t m_pin;
+    unsigned char m_modeFct;
+    unsigned char m_modeFctOld;
+    unsigned char m_csgAuto, m_csgManu;
+    unsigned char m_csgGlobale, m_csgActuelle;
+    unsigned char m_csgMin, m_csgMax;
+    unsigned char m_rampe;
+    unsigned char m_pin;
 
 private:
-    uint8_t m_outMin, m_outMax;
+    unsigned char m_outMin, m_outMax;
 };
 
 
@@ -112,13 +111,16 @@ public:
     LMoteurSpeed();
 
     //Accesseurs
+    //! @return True si consigne atteinte
     bool csgAtteinte(void) const {return m_csgAtteinte;}
 
     //Manipulateur
+    //! @brief Désactivation rampes @param Boolean
     void disable(bool Disable) {m_disabled = Disable;}
 
     //Méthodes
-    void main(uint8_t &csgGlobale, uint8_t &csgActuelle, unsigned short const& rampe);
+    //! @brief Gestion de la consigne
+    void main(unsigned char &csgGlobale, unsigned char &csgActuelle, unsigned short const& rampe);
 };
 
 

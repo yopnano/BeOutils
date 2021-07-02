@@ -24,9 +24,10 @@ void loop()
     g7 = 1;
     // changement d'état de la led
     led.toggle();
-    moteur.cmdAv(true);
-    moteur.cmdAr(false);
+    // moteur.cmdAv(true);
+    // moteur.cmdAr(false);
     moteur.csgAuto(255);
+    moteur.autoRelease(true);
   }
 
 
@@ -37,13 +38,15 @@ void loop()
     g7 = 2;
     // changement d'état de la led
     led.toggle();
-    moteur.cmdAv(false);
+    // moteur.cmdAv(false);
+    moteur.csgAuto(0);
   }
 
   // Etape 2
   if (tempo1s >= 5 && g7 == 2)
   {
     g7 = 3;
+    g7 = 0;
     tempo1s = 0;
     // changement d'état de la led
     led.toggle();

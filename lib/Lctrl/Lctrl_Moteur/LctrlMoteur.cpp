@@ -1,7 +1,6 @@
 #include "LctrlMoteur.h"
 
-
-LctrlMoteur::LctrlMoteur(uint8_t mode, uint8_t outMin, uint8_t outMax, uint8_t csgMin, uint8_t csgMax, uint8_t rampeAcc)
+LctrlMoteur::LctrlMoteur(unsigned char mode, unsigned char outMin, unsigned char outMax, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc)
 :   Lctrl(),
     m_pidMode(false),
     m_cmdAv(false),
@@ -15,8 +14,8 @@ LctrlMoteur::LctrlMoteur(uint8_t mode, uint8_t outMin, uint8_t outMax, uint8_t c
     m_csgManu(outMin),
     m_csgGlobale(0),
     m_csgActuelle(0),
-    m_csgMin(csgMin),
-    m_csgMax(csgMax),
+    m_csgMin((csgMin > outMin) ? csgMin : outMin),
+    m_csgMax((csgMax < outMax) ? csgMax : outMax),
     m_rampe(rampeAcc),
     m_outMin(outMin),
     m_outMax(outMax)
@@ -40,7 +39,7 @@ void LctrlMoteur::toggle(void)
     }
 }
 
-void LctrlMoteur::modeFct(uint8_t mode)
+void LctrlMoteur::modeFct(unsigned char mode)
 {
     if (m_modeFct != mode && m_modeFct != Defaut)
     {
@@ -57,13 +56,13 @@ bool LctrlMoteur::m_rearm(bool cdtRearm)
     return m_modeFct != Defaut;
 }
 
-void LctrlMoteur::csgAuto(uint8_t csg)
+void LctrlMoteur::csgAuto(unsigned char csg)
 {
     //Borne la consigne entre 0 et 255
     m_csgAuto = constrain(csg, m_csgMin, m_csgMax);
 }
 
-void LctrlMoteur::csgManu(uint8_t csg)
+void LctrlMoteur::csgManu(unsigned char csg)
 {
     //Borne la consigne entre 0 et 255
     m_csgManu = constrain(csg, m_outMin, m_outMax);
@@ -72,10 +71,10 @@ void LctrlMoteur::csgManu(uint8_t csg)
 void LctrlMoteur::KM(void)
 {
     m_KmAv = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAv) || m_KmAv))
-                || m_modeFct == Marche_AV_forcee;
+             || m_modeFct == Marche_AV_forcee;
 
     m_KmAr = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAr) || m_KmAr))
-                || m_modeFct == Marche_AR_forcee;
+             || m_modeFct == Marche_AR_forcee;
 }
 
 
@@ -85,7 +84,7 @@ m_csgAtteinte(false),
 m_lastMillis(0)
 {}
 
-void LMoteurSpeed::main(uint8_t &csgGlobale, uint8_t &csgActuelle, unsigned short const& rampe)
+void LMoteurSpeed::main(unsigned char &csgGlobale, unsigned char &csgActuelle, unsigned short const& rampe)
 {
     //Rampes désactivées
     if (m_disabled) csgActuelle = csgGlobale;

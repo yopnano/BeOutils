@@ -1,6 +1,7 @@
 #include "Lctrl_DriveS500.h"
 
-Lctrl_DriveS500::Lctrl_DriveS500(uint8_t pinReady, uint8_t pinRun, uint8_t pinStf, uint8_t pinStr, uint8_t pinSpeed, uint8_t mode, uint8_t rampeAcc) :
+Lctrl_DriveS500::Lctrl_DriveS500(unsigned char pinReady, unsigned char pinRun, unsigned char pinStf, unsigned char pinStr,
+                                 unsigned char pinSpeed, unsigned char mode, unsigned char rampeAcc) :
     //Constructeur
     LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
     m_pinRdy(pinReady),
@@ -19,22 +20,17 @@ void Lctrl_DriveS500::setup(void)
     if (pinIsEnable(m_pinRun)) pinMode(m_pinRun, INPUT_PULLUP);
     
     //Verifie si la pin speed est PWM
-    if (digitalPinToTimer(m_pin  ) == NOT_ON_TIMER && m_modeFct == Mode_auto_Ana) {Serial.print (F("Lctrl_DriveS500 Warning : Pin speed > ")); Serial.print (m_pin  ); Serial.println (F(" isn't PWM"));}
+    if (digitalPinToTimer(m_pin  ) == NOT_ON_TIMER && m_modeFct == Mode_auto_Ana)
+    {
+        Serial.print (F("Lctrl_DriveS500 Warning : Pin speed > "));
+        Serial.print (m_pin);
+        Serial.println (F(" isn't PWM"));
+    }
     else pinMode(m_pin, OUTPUT);
     
     if(pinIsEnable(m_pinStf)) pinMode(m_pinStf, OUTPUT);
-    if(pinIsEnable(m_pinStr)) pinMode(m_pinStr, OUTPUT);
-        
+    if(pinIsEnable(m_pinStr)) pinMode(m_pinStr, OUTPUT);    
 }
-
-void Lctrl_DriveS500::release(void)
-{   //Methode pour relâcher le moteur
-    m_cmdAr = false;
-    m_cmdAv = false;
-    m_KmAv = false;
-    m_KmAr = false;
-}
-
 
 void Lctrl_DriveS500::main(void)
 {   //Fonction principale moteur
@@ -63,7 +59,6 @@ void Lctrl_DriveS500::main(void)
         m_csgActuelle = 0;
     }
     
-
     //Pilotage des sorties
     if (pinIsEnable(m_pinStf)) digitalWrite(m_pinStf, m_KmAv);
     if (pinIsEnable(m_pinStr)) digitalWrite(m_pinStr, m_KmAr);
@@ -79,10 +74,10 @@ void Lctrl_DriveS500::main(void)
 void Lctrl_DriveS500::KM(void)
 {
     m_KmAv = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto_Ana && m_cmdAv) || m_KmAv))
-                ||  m_modeFct == Marche_AV_forcee
-                || (m_modeFct == Mode_auto_Tor && m_cmdAv);
+             ||  m_modeFct == Marche_AV_forcee
+             || (m_modeFct == Mode_auto_Tor && m_cmdAv);
 
     m_KmAr = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto_Ana && m_cmdAr) || m_KmAr))
-                ||  m_modeFct == Marche_AR_forcee
-                || (m_modeFct == Mode_auto_Tor && m_cmdAr);
+             ||  m_modeFct == Marche_AR_forcee
+             || (m_modeFct == Mode_auto_Tor && m_cmdAr);
 }

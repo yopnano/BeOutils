@@ -25,8 +25,8 @@
 #include <Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
 #include <Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
 #include <Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
-//#include <Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.cpp>
 #include <Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
+#include <Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
 
 //Lcom
 #include <Lcom_433MHz\Lcom_433MHz.cpp>
@@ -42,7 +42,7 @@
    ##    #########  ##  ####  ##  ####     ##     ##  ##        ##   ##    ##        ##        ##     ##  #########  ##  #### \n\
    ##    ##     ##  ##   ###  ##   ###     ##     ##  ##        ##    ##   ##        ##        ##     ##  ##     ##  ##   ### \n\
    ##    ##     ##  ##    ##  ##    ##     ##     ##  ########  ##     ##  ########  ########  ########   ##     ##  ##    ## "
-#define PrintProject() Serial.println (F(StrLogo)); Serial.print (F(ProjectName)); Serial.print (F(", Uploaded : ")); Serial.print (F(__DATE__)); Serial.print (F(" ")); Serial.println (F(__TIME__)); Serial.println()
+#define ProjectInfos() Serial.println (F(StrLogo)); Serial.print (F(ProjectName)); Serial.print (F(", Uploaded : ")); Serial.print (F(__DATE__)); Serial.print (F(" ")); Serial.println (F(__TIME__)); Serial.println()
 
 
 /* 

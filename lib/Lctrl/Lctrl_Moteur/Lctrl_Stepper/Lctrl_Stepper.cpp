@@ -1,7 +1,7 @@
 #include "Lctrl_Stepper.h"
 
 
-LctrlStepper::LctrlStepper(uint8_t pinStep, uint8_t pinDir, uint8_t pinEnable, uint16_t stepsRevolution, uint16_t vMax, uint8_t mode,  uint8_t csgMin, uint8_t csgMax, uint8_t rampeAcc) :
+LctrlStepper::LctrlStepper(unsigned char pinStep, unsigned char pinDir, unsigned char pinEnable, unsigned short stepsRevolution, unsigned short vMax, unsigned char mode,  unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc) :
     LctrlMoteur(mode, 0, 255, csgMin, csgMax, rampeAcc),
     m_speed(),
     m_keepEnable(false),

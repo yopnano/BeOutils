@@ -1,6 +1,6 @@
 #include "Lctrl_MoteurPWM.h"
 
-Lctrl_MoteurPWM::Lctrl_MoteurPWM(uint8_t pinAv, uint8_t pinAr, uint8_t mode, uint8_t csgMin, uint8_t csgMax, uint8_t rampeAcc) :
+Lctrl_MoteurPWM::Lctrl_MoteurPWM(unsigned char pinAv, unsigned char pinAr, unsigned char mode, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc) :
     //Constructeur
     LctrlMoteur(mode, 0, 255, csgMin, csgMax, rampeAcc)
     {
