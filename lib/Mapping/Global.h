@@ -16,20 +16,28 @@
  * Lib
  */
 
-//Lio
-#include <LioTor\LioTor.cpp>
-#include <LioPwm\LioPwm.cpp>
-#include <LioAna\LioAna_Fscale\LioAna_Fscale.cpp>
-
-//Lctrl_Moteur
-#include <Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
-#include <Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
-#include <Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
-#include <Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
-#include <Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
-
 //Lcom
-#include <Lcom_433MHz\Lcom_433MHz.cpp>
+    #include <Lcom_433MHz\Lcom_433MHz.cpp>
+
+//Lcpt
+    #include <Lcpt_Fpulse\Lcpt_Fpulse.h>
+    #include <Lcpt_Fcodeur\Lcpt_Fcodeur.h>
+    
+
+//Lctrl
+    //Lctrl_Moteur
+    #include <Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
+    #include <Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
+    #include <Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
+    #include <Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
+    #include <Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
+//Lio
+    #include <LioTor\LioTor.cpp>
+    #include <LioPwm\LioPwm.cpp>
+    #include <LioAna\LioAna_Fscale\LioAna_Fscale.cpp>
+
+//Lreg
+    #include <LregPID\Lreg_PID.h>
 
 //external
 #include <RTClib.h>

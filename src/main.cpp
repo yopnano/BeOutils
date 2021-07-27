@@ -13,56 +13,41 @@ void loop()
   // fonction main des méthodes
   sys.main();
   ModMain();
- 
-  // gestion tempo1s
-  if (sys.ft1Hz()) {tempo1s++;}
 
-  // Etape 0
+  pid.input = codeur.position() * 14.0;
+  pid.SetOutputLimits(-255, 255);
+  moteur.pidMode(true);
+
+  moteur.cmdAr (pid.output < 0);
+  moteur.cmdAv (pid.output > 0);
+  moteur.csgAuto (36 + abs(pid.output));
+  //double vitesse = codeur.vitesseAbs() * 0.233;
+
+  if (sys.ft2Hz())
+  {
+    Serial.print("position : " + (String) pid.input);
+    Serial.println("  pid out : " + (String) pid.output);
+  }
+
+  if (sys.ft1Hz()) tempo1s ++;
+
   if (g7 == 0)
   {
     tempo1s = 0;
+    pid.setpoint = 0;
     g7 = 1;
-    // changement d'état de la led
-    led.toggle();
-    // moteur.cmdAv(true);
-    // moteur.cmdAr(false);
-    moteur.csgAuto(255);
-    moteur.autoRelease(true);
   }
 
-
-  // Etape 1
-  if (tempo1s >= 5 && g7 == 1)
+  if (g7 == 1 && tempo1s >= 1)
   {
     tempo1s = 0;
+    pid.setpoint = 100;
     g7 = 2;
-    // changement d'état de la led
-    led.toggle();
-    // moteur.cmdAv(false);
-    moteur.csgAuto(0);
   }
 
-  // Etape 2
-  if (tempo1s >= 5 && g7 == 2)
+  if (g7 == 2 && tempo1s >= 1)
   {
-    g7 = 3;
+    tempo1s = 0;
     g7 = 0;
-    tempo1s = 0;
-    // changement d'état de la led
-    led.toggle();
-    moteur.cmdAr(true);
   }
-
-  // Etape 3
-  if (tempo1s >= 5 && g7 == 3)
-  {
-    tempo1s = 0;
-    g7 = 4;
-    // changement d'état de la led
-    led.toggle();
-    moteur.cmdAr(false);
-  }
-
-  if (tempo1s > 5 && g7 == 4) g7 = 0;
-
 }

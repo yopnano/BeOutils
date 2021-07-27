@@ -1,0 +1,22 @@
+{
+    "name": "Lreg_PID",
+    "version": "0.0.1",
+    "description": "a PID control",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/yopnano/Lreg_PID.git"
+    },
+    "authors":
+    [
+      {
+        "name": "yann herledan",
+        "email": "yannherledan1@gmail.com"
+      }
+    ],
+    "dependencies": {
+      "br3ttb/PID": "^1.2.1"
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }
