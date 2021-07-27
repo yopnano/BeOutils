@@ -40,7 +40,7 @@ public:
     */
     void cmdAr(bool enable) {m_cmdAr = enable; if(enable) m_cmdAv = false;}
     ///@return retourne l'état de la commande
-    bool cmdAR(void) const {return m_cmdAr;}
+    bool cmdAr(void) const {return m_cmdAr;}
 
     /*! @brief  Mode de fonctionnement moteur.
         

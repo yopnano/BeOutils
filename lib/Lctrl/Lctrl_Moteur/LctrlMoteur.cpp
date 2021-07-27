@@ -70,10 +70,10 @@ void LctrlMoteur::csgManu(unsigned char csg)
 
 void LctrlMoteur::KM(void)
 {
-    m_KmAv = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAv) || m_KmAv))
+    m_KmAv = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAv) || m_KmAv)) &! m_cmdAr
              || m_modeFct == Marche_AV_forcee;
 
-    m_KmAr = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAr) || m_KmAr))
+    m_KmAr = (m_csgActuelle > m_csgMin && ((m_modeFct == Mode_auto && m_cmdAr) || m_KmAr)) &! m_cmdAv
              || m_modeFct == Marche_AR_forcee;
 }
 
