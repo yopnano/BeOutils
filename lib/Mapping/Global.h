@@ -17,7 +17,8 @@
  */
 
 //Lcom
-    #include <Lcom_433MHz\Lcom_433MHz.cpp>
+    #include <Lcom_433MHz\Lcom_433MHz.h>
+    #include <Lcom_IR\Lcom_IR.h>
 
 //Lcpt
     #include <Lcpt_Fpulse\Lcpt_Fpulse.h>
