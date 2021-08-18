@@ -10,7 +10,7 @@ private:
     unsigned char m_pulse_pin;
 
     unsigned short m_pulseCount;
-    unsigned short m_period;
+    unsigned short m_pulseCalc;
 
     unsigned long m_lastMillis;
 
@@ -18,13 +18,13 @@ private:
     double m_cpt;
     double m_flow;
 public:
-    Lcpt_Fpulse(unsigned char pin, unsigned char poidsPulse = 23, unsigned short countPeriod = 1000);
+    Lcpt_Fpulse(unsigned char pin, unsigned char poidsPulse = 23, unsigned short pulseCalc = 10);
     ~Lcpt_Fpulse();
 
     void setup(void);
     void main (void);
 
     double volume(void) const {return m_cpt;} //Volume en L
-    double debit (void) const {return m_flow * (60000/m_period);} //Débit en L/min
+    double debit (void) const {return m_flow;} //Débit en L/min
 };
 #endif
