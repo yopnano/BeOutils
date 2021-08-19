@@ -14,8 +14,8 @@ ledTor led(LED_BUILTIN);
 // Lctrl_DriveS500 moteur(2, 3, 4, 5, 6, Lctrl_DriveS500::Mode_auto, 40);
 // Lctrl_Brushless_2sens moteur(2, Lctrl_Brushless_2sens::Mode_auto, 40, 1000, 1500, 2000);
 
-Lcpt_Fpulse debitmetre(2);
-//Lcpt_Fcodeur codeur(2, 3, 0.11, 100);
+//Lcpt_Fpulse debitmetre(2);
+Lcpt_Fcodeur codeur(2, 3, 0.11, 55);
 
 //Lreg_PID pid(0.7, 0, 0.1);
 //Lreg_PID pid(1.213, 0, 0);
@@ -29,12 +29,12 @@ void Modsetup(void)
     ProjectInfos();
     //for (auto &&iMoteur : moteur) iMoteur.setup();
     moteur.setup();
-    debitmetre.setup();
+    codeur.setup();
 }
 
 void ModMain(void)
 {
     //for (auto &&iMoteur : moteur) iMoteur.main();
     moteur.main();
-    debitmetre.main();
+    codeur.main();
 }

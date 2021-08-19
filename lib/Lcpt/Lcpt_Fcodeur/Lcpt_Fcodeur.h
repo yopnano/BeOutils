@@ -11,7 +11,7 @@ private:
     unsigned char m_dir_pin;
     
     short m_pulseCount;
-    unsigned short m_period;
+    unsigned short m_pulseCalc;
 
     unsigned long m_lastMillis;
 
@@ -19,14 +19,14 @@ private:
     double m_pos;
     double m_speed;
 public:
-    Lcpt_Fcodeur(unsigned char pulsepin, unsigned char dirpin, double poidsPulse = 0.11, unsigned short countPeriod = 1000);
+    Lcpt_Fcodeur(unsigned char pulsepin, unsigned char dirpin, double poidsPulse = 0.11, unsigned short pulseCalc = 33);
     ~Lcpt_Fcodeur();
 
     void setup(void);
     void main (void);
 
-    double position (void) const {return m_pos;} //Position en nombre de tour
-    short vitesse  (void) const {return (short) m_speed * (60000/m_period);} //vitesse en tr/min
-    short vitesseAbs (void) const;
+    double  position    (void) const {return m_pos;}            //Position en nombre de tour
+    short   vitesse     (void) const {return (short) m_speed;}  //vitesse en tr/min
+    short   vitesseAbs  (void) const {return abs(vitesse());}   //Vitesse absolue en tr/min
 };
 #endif

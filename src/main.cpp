@@ -14,13 +14,15 @@ void loop()
   sys.main();
   ModMain();
 
-  moteur.pidMode(true);
+  moteur.pidMode(false);
+  moteur.csgAuto(255);
+  moteur.cmdAv(true);
   //double vitesse = codeur.vitesseAbs() * 0.233;
 
   if (sys.ft2Hz())
   {
-    Serial.print("volume : " + (String) debitmetre.volume());
-    Serial.println("  debit : " + (String) debitmetre.debit());
+    Serial.print("vitesse : " + (String) codeur.vitesse());
+    Serial.println("  position : " + (String) codeur.position());
   }
 
   if (sys.ft1Hz()) tempo1s ++;
