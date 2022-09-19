@@ -25,6 +25,13 @@
     : ms(copy.ms), ss(copy.ss), mm(copy.mm),
       hh(copy.hh), d(copy.d) {}
 
+
+    #ifdef UsingLib_RTC
+        TIME::TIME(const DateTime &copy)
+        : ms(0), ss(copy.second()), mm(copy.minute()),
+            hh(copy.hour()) {}
+    #endif
+
     /**************************************************************************/
     /*!
         Méthodes

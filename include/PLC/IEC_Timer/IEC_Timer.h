@@ -2,7 +2,12 @@
 #define IEC_Timer_h
 
 #include <Arduino.h>
+#include <BeOutilsConfig.h>
 #include <PLC\Trigger\Trigger.h>
+
+#ifdef UsingLib_RTC
+    #include <RTClib.h>
+#endif
 
 class TIME
 {
@@ -20,6 +25,10 @@ class TIME
         TIME(uint32_t value, uint32_t multiplier =  Millisecondes);
         TIME(uint8_t day, uint8_t hour, uint8_t min = 0, uint8_t sec = 0);
         TIME(const TIME &copy);
+
+        #ifdef UsingLib_RTC
+            TIME(const DateTime &copy);
+        #endif
         
         void reset();
 

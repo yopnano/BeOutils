@@ -14,7 +14,8 @@
       "br3ttb/PID": "^1.2.1",
       "sui77/rc-switch": "^2.6.4",
       "marcoschwartz/LiquidCrystal_I2C": "^1.1.4",
-	    "arduino-libraries/Servo": "^1.1.8"
+	    "arduino-libraries/Servo": "^1.1.8",
+      "adafruit/RTClib": "^1.14.1"
     },
     "frameworks": "arduino",
     "platforms": "atmelavr"
