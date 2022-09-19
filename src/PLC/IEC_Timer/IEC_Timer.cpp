@@ -167,6 +167,14 @@
     return TIME(totalMillis() - right.totalMillis());
     }
 
+    TIME TIME::operator*(int mul) {
+    return TIME(totalMillis() * mul);
+    }
+
+    TIME TIME::operator/(int div) {
+    return TIME(totalMillis() / div);
+    }
+
 
 /**************************************************************************/
 /*!
