@@ -25,6 +25,13 @@
     : ms(copy.ms), ss(copy.ss), mm(copy.mm),
       hh(copy.hh), d(copy.d) {}
 
+
+    #ifdef UsingLib_RTC
+        TIME::TIME(const DateTime &copy)
+        : ms(0), ss(copy.second()), mm(copy.minute()),
+            hh(copy.hour()) {}
+    #endif
+
     /**************************************************************************/
     /*!
         Méthodes
@@ -53,16 +60,16 @@
         ss = sec;
     }
 
-    char *TIME::toString()
+    // char *TIME::toString()
+    // {
+    //     char buffer[22] = "";
+    //     return m_toString(buffer);
+    // }
+    String TIME::toString()
     {
         char buffer[22] = "";
-        return m_toString(buffer);
-    }
-    char *TIME::m_toString(char *buffer)
-    {
-            if (d)  sprintf(buffer, "%02dj %02dh %02dm %02ds %03dms ", d, hh, mm, ss, ms);
 
-        else if (hh) sprintf(buffer, "%02dh %02dm %02ds %03dms ", hh, mm, ss, ms);
+             if (hh) sprintf(buffer, "%02dh %02dm %02ds %03dms ", hh, mm, ss, ms);
 
         else if (mm) sprintf(buffer, "%02dm %02ds %03dms ", mm, ss, ms);
 
@@ -72,6 +79,28 @@
 
         return buffer;
     }
+
+    String TIME::toStringHMS()
+    {
+        char buffer [9];
+        sprintf(buffer, "%02d:%02d:%02d", hh, mm, ss);
+        return buffer;
+    }
+
+    // char *TIME::m_toString(char *buffer)
+    // {
+    //         if (d)  sprintf(buffer, "%02dj %02dh %02dm %02ds %03dms ", d, hh, mm, ss, ms);
+
+    //     else if (hh) sprintf(buffer, "%02dh %02dm %02ds %03dms ", hh, mm, ss, ms);
+
+    //     else if (mm) sprintf(buffer, "%02dm %02ds %03dms ", mm, ss, ms);
+
+    //     else if (ss) sprintf(buffer, "%02ds %03dms ", ss, ms);
+
+    //     else if (ms) sprintf(buffer, "%03dms ", ms);
+
+    //     return buffer;
+    // }
 
     /**************************************************************************/
     /*!
@@ -136,6 +165,14 @@
     /**************************************************************************/
     TIME TIME::operator-(const TIME &right) {
     return TIME(totalMillis() - right.totalMillis());
+    }
+
+    TIME TIME::operator*(int mul) {
+    return TIME(totalMillis() * mul);
+    }
+
+    TIME TIME::operator/(int div) {
+    return TIME(totalMillis() / div);
     }
 
 
