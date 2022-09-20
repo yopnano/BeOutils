@@ -23,6 +23,7 @@ public:
     byte val;
 };
 
+/// @brief OBSOLETE utilisez LioPwm.cmd à la place
 class LioPwmTor : public LioPwm
 {
 private:
