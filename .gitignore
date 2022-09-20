@@ -1,6 +1,6 @@
 .pio/**
 .vscode/**
-include/BeOutilsConfig.h
 platformio.ini
+src/Config.h
 src/main.cpp
 src/Mapping.h
