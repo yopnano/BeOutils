@@ -11,6 +11,7 @@
 
 
 #include <Lcalc\Lcalc.h>
+#include <Lcmd\Lcmd.h>
 #include <Lcom\Lcom.h>
 #include <Lcpt\Lcpt.h>
 #include <Lctrl\Lctrl.h>
