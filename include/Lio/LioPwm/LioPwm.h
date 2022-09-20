@@ -35,6 +35,8 @@ private:
     uint8_t m_oldValue;
 
 public:
+    LioPwmTor(uint8_t pin, bool inverted = false);
+
     /*! @brief  Activer l'actionneur
         La consigne retourne à la valeur précedente
      */

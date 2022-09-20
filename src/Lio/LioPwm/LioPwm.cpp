@@ -1,9 +1,7 @@
 #include <Lio\LioPwm\LioPwm.h>
 
-LioPwm::LioPwm(uint8_t pin, bool inverted) : // Constructeur
-                                             m_inverted(inverted),
+LioPwm::LioPwm(uint8_t pin, bool inverted) : m_inverted(inverted),
                                              m_pin(pin),
-                                             m_oldValue(0),
                                              val(0)
 {
 }
@@ -31,6 +29,12 @@ void LioPwm::main(void)
 }
 
 // ======================= Lio Pwm Tor ======================= //
+
+LioPwmTor::LioPwmTor(uint8_t pin, bool inverted) : LioPwm(pin, inverted),
+                                                   m_oldValue(0)
+{
+}
+
 void LioPwmTor::turnOff(void)
 {
     if (val)
