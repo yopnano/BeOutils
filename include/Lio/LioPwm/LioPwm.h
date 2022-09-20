@@ -8,60 +8,42 @@ class LioPwm
 {
 protected:
     bool m_inverted;
-    uint8_t m_pin;
+    byte m_pin;
 
 public:
-    /*! @brief  Sortie PWM.
+    LioPwm(byte pin, bool inverted = false);
 
-        @param pin  n° broche sortie PWM
-        @param Inverted pour inverser l'état de la sortie
-    */
-    LioPwm(uint8_t pin, bool inverted = false);
-
-    /*! @brief  Main PWM.
-        Gestion de la sortie PWM
-    */
     void main(void);
     void setup(void);
 
-    /*! @brief  Valeur de la sortie
-     */
-    uint8_t val;
+    /// @brief Commande de la sortie (false - true)
+    bool cmd;
+
+    /// @brief Valeur de la sortie (0 - 255)
+    byte val;
 };
 
 class LioPwmTor : public LioPwm
 {
 private:
-    uint8_t m_oldValue;
+    byte m_oldValue;
 
 public:
-    LioPwmTor(uint8_t pin, bool inverted = false);
+    LioPwmTor(byte pin, bool inverted = false);
 
-    /*! @brief  Activer l'actionneur
-        La consigne retourne à la valeur précedente
-     */
     void turnOn();
-
-    /*! @brief  Desactiver l'actionneur
-     */
     void turnOff();
-
-    /*! @brief  Inverser l'état de l'actionneur
-        si actionneur en marche -> arrêt
-        si actionneur à l'arrêt -> dernière consigne utilisée
-    */
     void toggle();
 };
 
 class LioPwmRampe : public LioPwm, public Lcmd_Rampe
 {
 public:
-    LioPwmRampe(uint8_t pin, unsigned short rampe_ms = 10, bool inverted = false);
+    LioPwmRampe(byte pin, byte rampe_ms = 10, bool inverted = false);
 
     void main(void);
 
-    /*! @brief  Consigne de la sortie
-     */
-    uint8_t csg;
+    /// @brief  Consigne de la sortie (0 - 255)
+    byte csg;
 };
 #endif
