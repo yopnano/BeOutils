@@ -1,5 +1,6 @@
 .pio/**
 .vscode/**
 platformio.ini
+src/Config.h
 src/main.cpp
 src/Mapping.h
