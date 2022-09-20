@@ -3,7 +3,7 @@
 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <Lhw\Screen\Lcd_I2C\Lhw_Lcd.h>
+#include <BeOutilsConfig.h>
 
 class Lhw_Lcd : public LiquidCrystal_I2C
 {

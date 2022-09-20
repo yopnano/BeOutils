@@ -1,6 +1,6 @@
-#ifdef UsingLib_LcdI2c
+#include <Lhw\Screen\Lcd_I2C\Lhw_Lcd.h>
 
-    #include <Lhw\Screen\Lcd_I2C\Lhw_Lcd.h>
+#ifdef UsingLib_LcdI2c
 
     Lhw_Lcd::Lhw_Lcd(const uint8_t lcd_Addr, const uint8_t lcd_cols, const uint8_t lcd_rows)
     :
