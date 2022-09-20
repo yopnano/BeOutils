@@ -10,6 +10,8 @@ protected:
     bool m_inverted;
     byte m_pin;
 
+    virtual bool enable(void) const{ return cmd; }
+
 public:
     LioPwm(byte pin, bool inverted = false);
 
@@ -41,6 +43,8 @@ class LioPwmRampe : public LioPwm, public Lcmd_Rampe
 {
 public:
     LioPwmRampe(byte pin, byte rampe_ms = 10, bool inverted = false);
+
+    bool enable(void) const override { return csg > 0; }
 
     void main(void);
 
