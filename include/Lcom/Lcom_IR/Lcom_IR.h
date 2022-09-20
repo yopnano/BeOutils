@@ -2,7 +2,7 @@
 #define Lcom_IR_h
 
 #include <Arduino.h>
-
+#include <BeOutilsConfig.h>
 
 /*! @brief  Récepteur 433 MHz.*/
 class Lcom_RX_IR

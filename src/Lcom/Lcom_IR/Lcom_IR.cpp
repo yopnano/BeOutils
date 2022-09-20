@@ -1,6 +1,6 @@
-#ifdef UsingLib_IR
+#include <Lcom\Lcom_IR\Lcom_IR.h>
 
-    #include <Lcom\Lcom_IR\Lcom_IR.h>
+#ifdef UsingLib_IR
     #include <IRremote.h> // appeleé dans le CPP car l'instance est dans la bibliothèque
 
     Lcom_RX_IR::Lcom_RX_IR(uint8_t pin) :
