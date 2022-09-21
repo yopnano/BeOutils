@@ -41,10 +41,12 @@ public:
 
 class LioPwmRampe : public LioPwm, public Lcmd_Rampe
 {
+protected:
+
 public:
     LioPwmRampe(byte pin, byte rampe_ms = 10, bool inverted = false);
 
-    bool enable(void) const override { return csg > 0; }
+    virtual bool enable(void) const override { return cmd && csg > 0; }
 
     void main(void);
 

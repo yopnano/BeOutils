@@ -27,9 +27,6 @@ void LioPwm::setup(void)
 /// Gestion de la sortie PWM
 void LioPwm::main(void)
 {
-    // Borne la consigne entre 0 et 255
-    val = constrain(val, 0, 255);
-
     // Ecriture de la sortie
     analogWrite(m_pin, abs((m_inverted ? 255 : 0) - (val * enable())));
 }
@@ -86,6 +83,6 @@ LioPwmRampe::LioPwmRampe(byte pin, byte rampe_ms, bool inverted) : LioPwm(pin, i
 /// Gestion de la sortie PWM
 void LioPwmRampe::main(void)
 {
-    Lcmd_Rampe::main(csg * cmd, val);
+    Lcmd_Rampe::main(csg * enable(), val);
     LioPwm::main();
 }
