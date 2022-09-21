@@ -10,7 +10,7 @@ Lcmd_Rampe::Lcmd_Rampe(unsigned short rampe_ms) :   m_millisOld(millis()),
 void Lcmd_Rampe::main(unsigned char csg, unsigned char &csgActuelle)
 {
     // Rampe désactivée
-    if (disable || rampe == 0) csgActuelle = csg;
+    if (disable) csgActuelle = csg;
 
     // Rampe inactive
     if (csgActuelle == csg)
@@ -19,7 +19,7 @@ void Lcmd_Rampe::main(unsigned char csg, unsigned char &csgActuelle)
     }
 
     // Rampe incrémentation / décrémentation
-    else if (millis() >= m_millisOld + rampe)
+    else if (rampe == 0 || (millis() >= m_millisOld + rampe))
     {
         m_millisOld += rampe;
         csgActuelle += (csg > csgActuelle) ? 1 : -1;
