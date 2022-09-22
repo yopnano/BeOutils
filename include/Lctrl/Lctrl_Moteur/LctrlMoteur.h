@@ -4,63 +4,140 @@
 #include <Arduino.h>
 #include <BeOutilsConfig.h>
 #include <Lctrl\Lctrl.h>
+#include <Lcmd\Lcmd_Rampe\Lcmd_Rampe.h>
 
-class LctrlMoteur : public Lctrl
+#ifndef LctrlMoteurSeuilReprise
+    #define LctrlMoteurSeuilReprise 0
+#endif
+
+class LctrlMoteurCsg1sens : /*public Lctrl, */ protected Lcmd_Rampe
 {
 public:
-    LctrlMoteur(unsigned char mode, unsigned char outMin, unsigned char outMax, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc);
+    LctrlMoteurCsg1sens(byte pin, unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+
+    void setup(void);
+    void main(void);
+
+    void pidMode(bool enable = true);
+
+    bool cmd; // Commande marche / arrêt moteur (True / False)
+    byte rampe; // Rampe d'accélération / décélération. Temps en ms entre chaque maj de consigne
+    byte csg; // Consigne vitesse (0 - 255)
+
+protected:
+    virtual void out(void) = 0; // Pilotage du moteur
+
+private:
+    byte m_val; // Valeur de pilotage
+    byte m_pin; // Pin de sortie du signal pwm
+    byte m_min, m_max; // Limite de consigne
+};
+
+class LctrlMoteurCsg2sens : protected Lcmd_Rampe
+{
+public:
+    LctrlMoteurCsg2sens(byte pin, unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+
+    virtual void setup(void); // TEST Pin 11 OUTPUT
+    void main(void);
+
+    void pidMode(bool enable = true);
+
+    void toggle(bool sansArret = false);
+
+    bool cmdAv; // Commande marche avant (True / False)
+    bool cmdAr; // Commande marche arrière (True / False)
+
+    byte rampe; // Rampe d'accélération / décélération. Temps en ms entre chaque maj de consigne
+    byte csg; // Consigne vitesse (0 - 255)
+
+protected:
+    virtual void out(void) ; // TEST Pin 11
+
+private:
+    bool m_arr; // Sens de rotation inverse
+    byte m_val; // Valeur de pilotage
+    byte m_pin; // Pin de sortie du signal pwm
+    byte m_min, m_max; // Limite de consigne
+};
+
+
+class LctrlMoteurOld : public Lctrl
+{
+public:
+    LctrlMoteurOld(unsigned char mode, unsigned char outMin, unsigned char outMax, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc);
 
     /// @brief  Changement de sens moteur FW -> STOP -> BW -> STOP -> FW ...
     void toggle(void);
 
     /*! @brief  Arrêt moteur sans décélération */
-    void stop(void) {m_cmdAv = false; m_cmdAr = false; m_KmAv = false; m_KmAr = false;}
-    bool stopped(void) const {return !m_KmAv &! m_KmAr;}
+    void stop(void)
+    {
+        m_cmdAv = false;
+        m_cmdAr = false;
+        m_KmAv = false;
+        m_KmAr = false;
+    }
+    bool stopped(void) const { return !m_KmAv & !m_KmAr; }
 
     /*! @brief  Arrêt moteur avec décélération */
-    void release(void) {m_cmdAv = false; m_cmdAr = false;}
+    void release(void)
+    {
+        m_cmdAv = false;
+        m_cmdAr = false;
+    }
 
-    void pidMode(bool enable) {m_pidMode = enable;}
-    
+    void pidMode(bool enable) { m_pidMode = enable; }
+
     /*! @brief  Bit de commande marche avant.
-        
+
         Condition moteur en mode auto modeFct = Mode_auto
-        
+
         @param  FALSE > moteur à l'arrêt
         @param  TRUE  > marche avant à la consigne auto
     */
-    void cmdAv(bool enable) {m_cmdAv = enable; if(enable) m_cmdAr = false;}
+    void cmdAv(bool enable)
+    {
+        m_cmdAv = enable;
+        if (enable)
+            m_cmdAr = false;
+    }
     ///@return retourne l'état de la commande
-    bool cmdAv(void) const {return m_cmdAv;}
-    
+    bool cmdAv(void) const { return m_cmdAv; }
+
     /*! @brief  Bit de commande marche arrière.
-        
+
         Condition moteur en mode auto modeFct = Mode_auto
-        
+
         @param  FALSE > moteur à l'arrêt
         @param  TRUE  > marche arrière à la consigne auto
     */
-    void cmdAr(bool enable) {m_cmdAr = enable; if(enable) m_cmdAv = false;}
+    void cmdAr(bool enable)
+    {
+        m_cmdAr = enable;
+        if (enable)
+            m_cmdAv = false;
+    }
     ///@return retourne l'état de la commande
-    bool cmdAr(void) const {return m_cmdAr;}
+    bool cmdAr(void) const { return m_cmdAr; }
 
     /*! @brief  Mode de fonctionnement moteur.
-        
+
         Mode de fonctionement automatique = 3
         liste des modes classname::Mode...
     */
     void modeFct(unsigned char mode);
-    unsigned char modeFct(void) const {return m_modeFct;}
-    
+    unsigned char modeFct(void) const { return m_modeFct; }
+
     /// @brief Consigne de vitesse en mode auto de 0 à 255
     void csgAuto(unsigned char csg);
     /// @return retourne la valeur de consigne
-    unsigned char csgAuto(void) const {return m_csgAuto;}
+    unsigned char csgAuto(void) const { return m_csgAuto; }
 
     /// @brief Consigne de vitesse en mode manuel de 0 à 255
     void csgManu(unsigned char csg);
     /// @return retourne la valeur de consigne
-    unsigned char csgManu(void) const {return m_csgManu;}
+    unsigned char csgManu(void) const { return m_csgManu; }
 
     // Enumération mode de fonctionnement moteur
     enum Mode
@@ -71,15 +148,15 @@ public:
         Mode_auto,
         Defaut = 4
     };
-    
+
 protected:
     virtual void KM(void);
 
     //! @brief  Bool indiquant s'il sagit d'un moteur 1 ou 2 sens
     virtual bool m2sens() const = 0;
-    
+
     bool m_rearm(bool cdtRearm);
-    
+
     bool m_pidMode;
     bool m_cmdAv, m_cmdAr, m_memCmd;
     bool m_KmAv, m_KmAr;
@@ -96,44 +173,41 @@ private:
     unsigned char m_outMin, m_outMax;
 };
 
-
-
 class LMoteurSpeed
 {
 private:
-    void razTimer() {m_lastMillis = millis();}
-    
+    void razTimer() { m_lastMillis = millis(); }
+
     bool m_disabled;
     bool m_csgAtteinte;
 
     unsigned long m_lastMillis;
 
 public:
-    //Constructeur
+    // Constructeur
     LMoteurSpeed();
 
-    //Accesseurs
+    // Accesseurs
     //! @return True si consigne atteinte
-    bool csgAtteinte(void) const {return m_csgAtteinte;}
+    bool csgAtteinte(void) const { return m_csgAtteinte; }
 
-    //Manipulateur
+    // Manipulateur
     //! @brief Désactivation rampes @param Boolean
-    void disable(bool Disable) {m_disabled = Disable;}
+    void disable(bool Disable) { m_disabled = Disable; }
 
-    //Méthodes
+    // Méthodes
     //! @brief Gestion de la consigne
-    void main(unsigned char &csgGlobale, unsigned char &csgActuelle, unsigned short const& rampe);
+    void main(unsigned char &csgGlobale, unsigned char &csgActuelle, unsigned short const &rampe);
 };
 
 #ifdef UsingLib_Servo
-    #include <Lctrl\Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
-    #include <Lctrl\Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
+#include <Lctrl\Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
+#include <Lctrl\Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
 #endif
 
 #include <Lctrl\Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_Stepper\Lctrl_Stepper.h>
-
 
 #endif
