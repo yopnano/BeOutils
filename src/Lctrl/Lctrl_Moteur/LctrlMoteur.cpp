@@ -1,28 +1,19 @@
 #include <Lctrl\Lctrl_Moteur\LctrlMoteur.h>
 
 /// @brief Gestion de moteur 1 sens de rotation
-/// @param pin N° broche de sortie PWM
 /// @param rampe_ms Temps Accélération / décélération en ms : 10 = 2.5 sec de 0 à 255
 /// @param min consigne minimum la sortie PWM ne descend pas sous cette valeur
 /// @param max consigne maximum la sortie PWM ne dépasse pas cette valeur
-LctrlMoteurCsg1sens::LctrlMoteurCsg1sens(byte pin, unsigned short rampe_ms, byte min, byte max)
+LctrlMoteurCsg1sens::LctrlMoteurCsg1sens(unsigned short rampe_ms, byte min, byte max)
     : // Lctrl(),
       Lcmd_Rampe(rampe_ms),
       cmd(false),
       rampe(rampe_ms),
       csg(0),
       m_val(0),
-      m_pin(pin),
       m_min(min),
       m_max(max)
 {
-}
-
-/// @brief Paramétrage initial du moteur
-/// Appeler dans la fonction modSetup()
-void LctrlMoteurCsg1sens::setup(void)
-{
-    pinMode(m_pin, OUTPUT);
 }
 
 /// @brief Gestion de fonctionnement du moteur
@@ -41,12 +32,6 @@ void LctrlMoteurCsg1sens::main(void)
     out();
 }
 
-/// @brief Gestion de la sortie
-void LctrlMoteurCsg1sens::out(void)
-{
-    analogWrite(m_pin, m_val);
-}
-
 /// @brief Mode PID.
 /// Les rampes d'accélération et décélération sont désactivées
 /// @param enable False / True Activation du mode PID
@@ -56,11 +41,10 @@ void LctrlMoteurCsg1sens::pidMode(bool enable)
 }
 
 /// @brief Gestion de moteur 2 sens de rotation
-/// @param pin N° broche de sortie PWM
 /// @param rampe_ms Temps Accélération / décélération en ms : 10 = 2.5 sec de 0 à 255
 /// @param min consigne minimum la sortie PWM ne descend pas sous cette valeur
 /// @param max consigne maximum la sortie PWM ne dépasse pas cette valeur
-LctrlMoteurCsg2sens::LctrlMoteurCsg2sens(byte pin, unsigned short rampe_ms, byte min, byte max)
+LctrlMoteurCsg2sens::LctrlMoteurCsg2sens(unsigned short rampe_ms, byte min, byte max)
     : // Lctrl(),
       Lcmd_Rampe(rampe_ms),
       cmdAv(false),
@@ -69,18 +53,9 @@ LctrlMoteurCsg2sens::LctrlMoteurCsg2sens(byte pin, unsigned short rampe_ms, byte
       csg(0),
       m_arr(true),
       m_val(0),
-      m_pin(pin),
       m_min(min),
       m_max(max)
 {
-}
-
-/// @brief Paramétrage initial du moteur
-/// Appeler dans la fonction modSetup()
-void LctrlMoteurCsg2sens::setup(void)
-{
-    pinMode(m_pin, OUTPUT);
-    // pinMode(m_pinAr, OUTPUT);
 }
 
 /// @brief Gestion de fonctionnement du moteur
@@ -101,7 +76,7 @@ void LctrlMoteurCsg2sens::main(void)
     // NOTES :
     // Si on veut que lors d'un changement de sens
     // le moteur reprenne dans l'autre sens dès que l'on atteint le m_min
-    // il suffit d'ajouter "#define LctrlMoteurSeuilReprise 0" dans le fichier config 
+    // il suffit d'ajouter "#define LctrlMoteurSeuilReprise 0" dans le fichier config
 
     // Gestion sens de rotation &! à tester
     if (!m_val)
@@ -111,36 +86,29 @@ void LctrlMoteurCsg2sens::main(void)
     out();
 }
 
-/// @brief // Permutation Avant / Arrêt / Arrière / Arrêt ...
-/// @param sansArret permet de ne pas faire d'arrêt entre chaque sens
-void LctrlMoteurCsg2sens::toggle(bool sansArret)
-{
-    
-    if (!sansArret)
-    {
-       cmdAv = (!cmdAv && !m_val) && m_arr;
-       cmdAr = (!cmdAr && !m_val) && !cmdAv;        
-    }
-    else
-    {
-        cmdAv = !cmdAv;
-        cmdAr = !cmdAv;
-    }
-}
-
-/// @brief Gestion des sorties
-void LctrlMoteurCsg2sens::out(void)
-{
-    // analogWrite(m_pinAr, m_val * m_arr);
-    analogWrite(m_pin, m_val * !m_arr);
-}
-
 /// @brief Mode PID.
 /// Les rampes d'accélération et décélération sont désactivées
 /// @param enable False / True Activation du mode PID
 void LctrlMoteurCsg2sens::pidMode(bool enable)
 {
     Lcmd_Rampe::disable = enable;
+}
+
+/// @brief // Permutation Avant / Arrêt / Arrière / Arrêt ...
+/// @param sansArret permet de ne pas faire d'arrêt entre chaque sens
+void LctrlMoteurCsg2sens::toggle(bool sansArret)
+{
+
+    if (!sansArret)
+    {
+        cmdAv = (!cmdAv && !m_val) && m_arr;
+        cmdAr = (!cmdAr && !m_val) && !cmdAv;
+    }
+    else
+    {
+        cmdAv = !cmdAv;
+        cmdAr = !cmdAv;
+    }
 }
 
 LctrlMoteurOld::LctrlMoteurOld(unsigned char mode, unsigned char outMin, unsigned char outMax, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc)

@@ -13,9 +13,9 @@
 class LctrlMoteurCsg1sens : /*public Lctrl, */ protected Lcmd_Rampe
 {
 public:
-    LctrlMoteurCsg1sens(byte pin, unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+    LctrlMoteurCsg1sens(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
 
-    void setup(void);
+    virtual void setup(void) = 0;
     void main(void);
 
     void pidMode(bool enable = true);
@@ -25,20 +25,19 @@ public:
     byte csg; // Consigne vitesse (0 - 255)
 
 protected:
-    virtual void out(void) = 0; // Pilotage du moteur
+    virtual void out(void) = 0;
+    byte m_val; // Valeur de pilotage
 
 private:
-    byte m_val; // Valeur de pilotage
-    byte m_pin; // Pin de sortie du signal pwm
     byte m_min, m_max; // Limite de consigne
 };
 
 class LctrlMoteurCsg2sens : protected Lcmd_Rampe
 {
 public:
-    LctrlMoteurCsg2sens(byte pin, unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+    LctrlMoteurCsg2sens(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
 
-    virtual void setup(void); // TEST Pin 11 OUTPUT
+    virtual void setup(void) = 0;
     void main(void);
 
     void pidMode(bool enable = true);
@@ -52,12 +51,12 @@ public:
     byte csg; // Consigne vitesse (0 - 255)
 
 protected:
-    virtual void out(void) ; // TEST Pin 11
-
-private:
+    /// @brief Gestion des sorties
+    virtual void out(void) = 0;
     bool m_arr; // Sens de rotation inverse
     byte m_val; // Valeur de pilotage
-    byte m_pin; // Pin de sortie du signal pwm
+    
+private:
     byte m_min, m_max; // Limite de consigne
 };
 

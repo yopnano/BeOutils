@@ -1,44 +1,57 @@
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
 
-Lctrl_MoteurPWM::Lctrl_MoteurPWM(unsigned char pinAv, unsigned char pinAr, unsigned char mode, unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc) :
-    //Constructeur
-    LctrlMoteur(mode, 0, 255, csgMin, csgMax, rampeAcc)
-    {
-        m_pin = pinAv;
-        m_pinAr = pinAr;
-    }
-
-
-void Lctrl_MoteurPWM::setup(void)
-{   //Setup des IOs
-    
-    //Verifie si les pins sont PWM
-    if (digitalPinToTimer(m_pin  ) == NOT_ON_TIMER) {Serial.print (F("LctrlMoteurPWM Warning : Pin cmdAv > ")); Serial.print (m_pin  ); Serial.println (F(" isn't PWM"));}
-    else pinMode(m_pin, OUTPUT);
-    
-    if (digitalPinToTimer(m_pinAr) == NOT_ON_TIMER) {Serial.print (F("LctrlMoteurPWM Warning : Pin cmdAr > ")); Serial.print (m_pinAr); Serial.println (F(" isn't PWM"));}
-    else pinMode(m_pinAr, OUTPUT);
+/// @brief Contrôle moteur par signal PWM.
+/// Mettre cmd à true et appliquer une de consigne de (0 - 255).
+/// Accélération / Décélération automatique paramétrable ainsi qu'un bornage consignes
+/// @param pin n° broche pour pilotage
+/// @param rampe_ms temps en milliseconde changement vitesse Defaut 0
+/// @param min consigne de vitesse de démarrage et d'arrêt moteur Defaut 0
+/// @param max consigne de vitesse maximale moteur Defaut 255
+Lctrl_MoteurPWM_1sens::Lctrl_MoteurPWM_1sens(byte pin, unsigned short rampe_ms, byte min, byte max)
+    : LctrlMoteurCsg1sens(rampe_ms, min, max),
+      m_pin(pin)
+{
 }
 
-void Lctrl_MoteurPWM::main(void)
-{   //Fonction principale moteur
-    
-    //Calcul de la consigne en fonction de l'état de marche
-    m_csgGlobale =  (m_modeFct == Marche_AV_forcee) * m_csgManu + //Mode manu avant
-                    (m_modeFct == Marche_AR_forcee) * m_csgManu + //Mode manu arriere
-                    (m_modeFct == Mode_auto) * (m_cmdAv ^ m_cmdAr) * m_csgAuto; //Mode auto avant XOR arriere
-    
+/// @brief Paramétrage initial du moteur
+/// Appeler dans la fonction modSetup()
+void Lctrl_MoteurPWM_1sens::setup(void)
+{
+    pinMode(m_pin, OUTPUT);
+}
 
-    //Mode PID
-    m_speed.disable(m_pidMode);
+/// @brief Gestion de la sortie
+void Lctrl_MoteurPWM_1sens::out(void)
+{
+    analogWrite(m_pin, m_val);
+}
 
-    //Si changement de consigne et front rampe => acceleration/deceleration
-    m_speed.main(m_csgGlobale, m_csgActuelle, m_rampe);
+/// @brief Contrôle moteur 2 sens par signal PWM.
+/// Mettre cmdAv ou cmdAr à true et appliquer une consigne de (0 - 255).
+/// Accélération / Décélération automatique paramétrable ainsi qu'un bornage consignes
+/// @param pinAv n° broche pour marche avant
+/// @param pinAr n° broche pour marche arrière
+/// @param rampe_ms temps en milliseconde changement vitesse Defaut 0
+/// @param min consigne de vitesse de démarrage et d'arrêt moteur Defaut 0
+/// @param max consigne de vitesse maximale moteur Defaut 255
+Lctrl_MoteurPWM_2sens::Lctrl_MoteurPWM_2sens(byte pinAv, byte pinAr, unsigned short rampe_ms, byte min, byte max)
+    : LctrlMoteurCsg2sens(rampe_ms, min, max),
+      m_pinAv(pinAv),
+      m_pinAr(pinAr)
+{
+}
 
-    //Gestions KmAv KmAr
-    KM();
+/// @brief Paramétrage initial du moteur
+/// Appeler dans la fonction modSetup()
+void Lctrl_MoteurPWM_2sens::setup(void)
+{
+    pinMode(m_pinAv, OUTPUT);
+    pinMode(m_pinAr, OUTPUT);
+}
 
-    //Pilotage des sorties
-    analogWrite(m_pin  , m_csgActuelle * m_KmAv);
-    analogWrite(m_pinAr, m_csgActuelle * m_KmAr); 
+/// @brief Gestion des sorties
+void Lctrl_MoteurPWM_2sens::out(void)
+{
+    analogWrite(m_pinAv, m_val * !m_arr);
+    analogWrite(m_pinAr, m_val * m_arr);
 }
