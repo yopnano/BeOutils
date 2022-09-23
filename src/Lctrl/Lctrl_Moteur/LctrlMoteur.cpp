@@ -16,13 +16,20 @@ LctrlMoteurCsg1cmd::LctrlMoteurCsg1cmd(unsigned short rampe_ms, byte min, byte m
 {
 }
 
-/// @brief Gestion de fonctionnement du moteur
-/// Appeler dans la fonction modMain()
-void LctrlMoteurCsg1cmd::main(void)
+/// @brief Gestion des entrées et mise à l'échelle
+void LctrlMoteurCsg1cmd::in(void)
 {
     // Contraite consigne sur min et max
     if (csg)
         csg = constrain(csg, m_min, m_max);
+}
+
+/// @brief Gestion de fonctionnement du moteur
+/// Appeler dans la fonction modMain()
+void LctrlMoteurCsg1cmd::main(void)
+{
+    // Gestion des entrées et mise à l'échelle
+    in();
 
     // Gestion rampe accélération / décélération
     Lcmd_Rampe::main(csg * cmd, m_val);
@@ -58,13 +65,20 @@ LctrlMoteurCsg2cmd::LctrlMoteurCsg2cmd(unsigned short rampe_ms, byte min, byte m
 {
 }
 
-/// @brief Gestion de fonctionnement du moteur
-/// Appeler dans la fonction modMain()
-void LctrlMoteurCsg2cmd::main(void)
+/// @brief Gestion des entrées et mise à l'échelle
+void LctrlMoteurCsg2cmd::in(void)
 {
     // Contraite consigne sur min et max
     if (csg)
         csg = constrain(csg, m_min, m_max);
+}
+
+/// @brief Gestion de fonctionnement du moteur
+/// Appeler dans la fonction modMain()
+void LctrlMoteurCsg2cmd::main(void)
+{
+    // Gestion des entrées et mise à l'échelle
+    in();
 
     // Faux si cmd ne correpond pas au sens de fonctionnement
     bool cmdEqSens = ((cmdAv && !m_arr) || (cmdAr && m_arr));

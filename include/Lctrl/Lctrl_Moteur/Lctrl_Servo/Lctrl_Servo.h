@@ -5,30 +5,25 @@
 #include <Servo.h>
 #include <Lctrl\Lctrl_Moteur\LctrlMoteur.h>
 
-class Lctrl_Servo : public LctrlMoteur
+class Lctrl_Servo : public LctrlMoteurCsg1cmd, private Servo
 {
 public:
-    // Enumération  mode de fonctionnement moteur
-    enum ModeServo
-        {
-            Arret_forcee,
-            Marche_forcee,
-            Mode_vitessePos,
-            Mode_auto,
-            Defaut
-        };
+    Lctrl_Servo(byte pin, unsigned short rampe_ms = 5, byte min = 0, byte max = 180);
 
-    Lctrl_Servo(unsigned char pin, unsigned char mode, unsigned char rampeAcc = 5, unsigned char posMin = 0, unsigned char posMax = 180);
+    void operator=(const Lctrl_Servo &right);
+    void synchro(Lctrl_Servo &right);
 
-    void main(void) override;
     void setup(void) override;
-    void autoRelease(bool enable) {m_autoRelease = enable;}
+
+    void in(void) override;
+    void out(void) override;
+
+    bool posAtteinte(void);
+
+
+    // bool autoRelease; // Detachement du servo lorsque consigne atteinte
 
 private:
-    LMoteurSpeed m_speed;
-    Servo m_servo;
-    
-    bool m2sens() const override {return false;}
-    bool m_autoRelease;
+    byte m_pin; // Pin de sortie du signal pwm
 };
 #endif
