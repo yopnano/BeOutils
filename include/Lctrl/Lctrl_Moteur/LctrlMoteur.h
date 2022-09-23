@@ -10,10 +10,10 @@
     #define LctrlMoteurSeuilReprise 0
 #endif
 
-class LctrlMoteurCsg1sens : /*public Lctrl, */ protected Lcmd_Rampe
+class LctrlMoteurCsg1cmd : /*public Lctrl, */ protected Lcmd_Rampe
 {
 public:
-    LctrlMoteurCsg1sens(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+    LctrlMoteurCsg1cmd(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
 
     virtual void setup(void) = 0;
     void main(void);
@@ -32,10 +32,10 @@ private:
     byte m_min, m_max; // Limite de consigne
 };
 
-class LctrlMoteurCsg2sens : protected Lcmd_Rampe
+class LctrlMoteurCsg2cmd : protected Lcmd_Rampe
 {
 public:
-    LctrlMoteurCsg2sens(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
+    LctrlMoteurCsg2cmd(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
 
     virtual void setup(void) = 0;
     void main(void);

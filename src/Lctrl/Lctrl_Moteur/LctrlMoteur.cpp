@@ -4,7 +4,7 @@
 /// @param rampe_ms Temps Accélération / décélération en ms : 10 = 2.5 sec de 0 à 255
 /// @param min consigne minimum la sortie PWM ne descend pas sous cette valeur
 /// @param max consigne maximum la sortie PWM ne dépasse pas cette valeur
-LctrlMoteurCsg1sens::LctrlMoteurCsg1sens(unsigned short rampe_ms, byte min, byte max)
+LctrlMoteurCsg1cmd::LctrlMoteurCsg1cmd(unsigned short rampe_ms, byte min, byte max)
     : // Lctrl(),
       Lcmd_Rampe(rampe_ms),
       cmd(false),
@@ -18,7 +18,7 @@ LctrlMoteurCsg1sens::LctrlMoteurCsg1sens(unsigned short rampe_ms, byte min, byte
 
 /// @brief Gestion de fonctionnement du moteur
 /// Appeler dans la fonction modMain()
-void LctrlMoteurCsg1sens::main(void)
+void LctrlMoteurCsg1cmd::main(void)
 {
     // Contraite consigne sur min et max
     if (csg)
@@ -35,7 +35,7 @@ void LctrlMoteurCsg1sens::main(void)
 /// @brief Mode PID.
 /// Les rampes d'accélération et décélération sont désactivées
 /// @param enable False / True Activation du mode PID
-void LctrlMoteurCsg1sens::pidMode(bool enable)
+void LctrlMoteurCsg1cmd::pidMode(bool enable)
 {
     Lcmd_Rampe::disable = enable;
 }
@@ -44,7 +44,7 @@ void LctrlMoteurCsg1sens::pidMode(bool enable)
 /// @param rampe_ms Temps Accélération / décélération en ms : 10 = 2.5 sec de 0 à 255
 /// @param min consigne minimum la sortie PWM ne descend pas sous cette valeur
 /// @param max consigne maximum la sortie PWM ne dépasse pas cette valeur
-LctrlMoteurCsg2sens::LctrlMoteurCsg2sens(unsigned short rampe_ms, byte min, byte max)
+LctrlMoteurCsg2cmd::LctrlMoteurCsg2cmd(unsigned short rampe_ms, byte min, byte max)
     : // Lctrl(),
       Lcmd_Rampe(rampe_ms),
       cmdAv(false),
@@ -60,7 +60,7 @@ LctrlMoteurCsg2sens::LctrlMoteurCsg2sens(unsigned short rampe_ms, byte min, byte
 
 /// @brief Gestion de fonctionnement du moteur
 /// Appeler dans la fonction modMain()
-void LctrlMoteurCsg2sens::main(void)
+void LctrlMoteurCsg2cmd::main(void)
 {
     // Contraite consigne sur min et max
     if (csg)
@@ -89,14 +89,14 @@ void LctrlMoteurCsg2sens::main(void)
 /// @brief Mode PID.
 /// Les rampes d'accélération et décélération sont désactivées
 /// @param enable False / True Activation du mode PID
-void LctrlMoteurCsg2sens::pidMode(bool enable)
+void LctrlMoteurCsg2cmd::pidMode(bool enable)
 {
     Lcmd_Rampe::disable = enable;
 }
 
 /// @brief // Permutation Avant / Arrêt / Arrière / Arrêt ...
 /// @param sansArret permet de ne pas faire d'arrêt entre chaque sens
-void LctrlMoteurCsg2sens::toggle(bool sansArret)
+void LctrlMoteurCsg2cmd::toggle(bool sansArret)
 {
 
     if (!sansArret)

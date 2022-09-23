@@ -8,7 +8,7 @@
 /// @param min consigne de vitesse de démarrage et d'arrêt moteur Defaut 0
 /// @param max consigne de vitesse maximale moteur Defaut 255
 Lctrl_MoteurPWM_1sens::Lctrl_MoteurPWM_1sens(byte pin, unsigned short rampe_ms, byte min, byte max)
-    : LctrlMoteurCsg1sens(rampe_ms, min, max),
+    : LctrlMoteurCsg1cmd(rampe_ms, min, max),
       m_pin(pin)
 {
 }
@@ -35,7 +35,7 @@ void Lctrl_MoteurPWM_1sens::out(void)
 /// @param min consigne de vitesse de démarrage et d'arrêt moteur Defaut 0
 /// @param max consigne de vitesse maximale moteur Defaut 255
 Lctrl_MoteurPWM_2sens::Lctrl_MoteurPWM_2sens(byte pinAv, byte pinAr, unsigned short rampe_ms, byte min, byte max)
-    : LctrlMoteurCsg2sens(rampe_ms, min, max),
+    : LctrlMoteurCsg2cmd(rampe_ms, min, max),
       m_pinAv(pinAv),
       m_pinAr(pinAr)
 {
