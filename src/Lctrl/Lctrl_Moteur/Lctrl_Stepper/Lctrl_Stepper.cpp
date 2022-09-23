@@ -2,7 +2,7 @@
 
 
 LctrlStepper::LctrlStepper(unsigned char pinStep, unsigned char pinDir, unsigned char pinEnable, unsigned short stepsRevolution, unsigned short vMax, unsigned char mode,  unsigned char csgMin, unsigned char csgMax, unsigned char rampeAcc) :
-    LctrlMoteur(mode, 0, 255, csgMin, csgMax, rampeAcc),
+    LctrlMoteurOld(mode, 0, 255, csgMin, csgMax, rampeAcc),
     m_speed(),
     m_keepEnable(false),
     m_pinDir(pinDir),

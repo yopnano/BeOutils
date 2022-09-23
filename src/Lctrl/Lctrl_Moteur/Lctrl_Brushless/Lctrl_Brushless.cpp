@@ -7,7 +7,7 @@
     */
 
     Lctrl_Brushless_1sens::Lctrl_Brushless_1sens(unsigned char pin, unsigned char mode, unsigned char rampeAcc, unsigned short dtMin, unsigned short dtMax):
-        LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
+        LctrlMoteurOld(mode, 0, 255, 0, 255, rampeAcc),
         m_dtMin(dtMin),
         m_dtMax(dtMax)
         {
@@ -63,7 +63,7 @@
     */
 
     Lctrl_Brushless_2sens::Lctrl_Brushless_2sens(unsigned char pin, unsigned char mode, unsigned char rampeAcc, unsigned short dtMin, unsigned short dtMid, unsigned short dtMax):
-        LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
+        LctrlMoteurOld(mode, 0, 255, 0, 255, rampeAcc),
         m_dtMin(dtMin),
         m_dtMid(dtMid),
         m_dtMax(dtMax)

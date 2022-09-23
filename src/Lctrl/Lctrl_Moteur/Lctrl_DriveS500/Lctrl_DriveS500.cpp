@@ -3,7 +3,7 @@
 Lctrl_DriveS500::Lctrl_DriveS500(unsigned char pinReady, unsigned char pinRun, unsigned char pinStf, unsigned char pinStr,
                                  unsigned char pinSpeed, unsigned char mode, unsigned char rampeAcc) :
     //Constructeur
-    LctrlMoteur(mode, 0, 255, 0, 255, rampeAcc),
+    LctrlMoteurOld(mode, 0, 255, 0, 255, rampeAcc),
     m_pinRdy(pinReady),
     m_pinRun(pinRun),
     m_pinStf(pinStf),

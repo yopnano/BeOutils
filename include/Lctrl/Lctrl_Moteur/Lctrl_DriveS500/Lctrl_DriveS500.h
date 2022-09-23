@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Lctrl\Lctrl_Moteur\LctrlMoteur.h>
 
-class Lctrl_DriveS500 : public LctrlMoteur
+class Lctrl_DriveS500 : public LctrlMoteurOld
 {
 public:
     // Enumération  mode de fonctionnement moteur

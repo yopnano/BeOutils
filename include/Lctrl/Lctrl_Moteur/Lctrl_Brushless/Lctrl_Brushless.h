@@ -5,7 +5,7 @@
 #include <Servo.h>
 #include <Lctrl\Lctrl_Moteur\LctrlMoteur.h>
 
-class Lctrl_Brushless_1sens : public LctrlMoteur
+class Lctrl_Brushless_1sens : public LctrlMoteurOld
 {
 public:
     // Enumération  mode de fonctionnement moteur
@@ -40,7 +40,7 @@ private:
 
 
 
-class Lctrl_Brushless_2sens : public LctrlMoteur
+class Lctrl_Brushless_2sens : public LctrlMoteurOld
 {
 public:
     // Enumération  mode de fonctionnement moteur

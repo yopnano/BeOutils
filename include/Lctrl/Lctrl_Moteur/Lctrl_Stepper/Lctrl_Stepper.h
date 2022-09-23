@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Lctrl\Lctrl_Moteur\LctrlMoteur.h>
 
-class LctrlStepper : public LctrlMoteur
+class LctrlStepper : public LctrlMoteurOld
 {
 private:
     LMoteurSpeed m_speed;

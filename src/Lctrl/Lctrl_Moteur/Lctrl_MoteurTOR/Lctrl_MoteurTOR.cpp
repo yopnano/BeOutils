@@ -2,7 +2,7 @@
 
 Lctrl_MoteurTOR::Lctrl_MoteurTOR(unsigned char pinAv, unsigned char pinAr, unsigned char mode, bool inverted) :
     //Constructeur
-    LctrlMoteur(mode, 0, 0, 0, 0, 0)
+    LctrlMoteurOld(mode, 0, 0, 0, 0, 0)
     {
         m_pin = pinAv;
         m_pinAr = pinAr;
