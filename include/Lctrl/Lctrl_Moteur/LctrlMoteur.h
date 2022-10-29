@@ -200,8 +200,8 @@ public:
 };
 
 #ifdef UsingLib_Servo
-#include <Lctrl\Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
-#include <Lctrl\Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
+    #include <Lctrl\Lctrl_Moteur\Lctrl_Brushless\Lctrl_Brushless.h>
+    #include <Lctrl\Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
 #endif
 
 #include <Lctrl\Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>

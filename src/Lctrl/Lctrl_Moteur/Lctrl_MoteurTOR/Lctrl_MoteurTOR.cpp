@@ -1,27 +1,61 @@
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
 
-Lctrl_MoteurTOR::Lctrl_MoteurTOR(unsigned char pinAv, unsigned char pinAr, unsigned char mode, bool inverted) :
-    //Constructeur
-    LctrlMoteurOld(mode, 0, 0, 0, 0, 0)
-    {
-        m_pin = pinAv;
-        m_pinAr = pinAr;
+/// @brief Contrôle moteur par signal TOR.
+/// Mettre cmd à true .
+/// @param pin n° broche pour pilotage
+/// @param inverted inversion des sorties logique ex : avec des relais
+Lctrl_MoteurTOR_1sens::Lctrl_MoteurTOR_1sens(byte pin, bool inverted) :
+    cmd(false),
+    m_pin(pin),
+    m_inverted(inverted)
+    {        
     }
 
-void Lctrl_MoteurTOR::setup(void)
+/// @brief Paramétrage initial du moteur
+/// Appeler dans la fonction modSetup()
+void Lctrl_MoteurTOR_1sens::setup(void)
 {
     pinMode(m_pin, OUTPUT);
-    pinMode(m_pinAr, OUTPUT);
-    m_modeFct = Mode_auto;
 }
 
-//Fonction principale moteur
-void Lctrl_MoteurTOR::main(void)
+/// @brief Gestion de fonctionnement du moteur
+/// Appeler dans la fonction modMain()
+void Lctrl_MoteurTOR_1sens::main(void)
 {
-    //Pilotage des sorties
-    m_KmAv = ((m_modeFct == Mode_auto && m_cmdAv &! m_cmdAr) || m_modeFct == Marche_AV_forcee) ^ m_inverted;
-    m_KmAr = ((m_modeFct == Mode_auto && m_cmdAr &! m_cmdAv) || m_modeFct == Marche_AR_forcee) ^ m_inverted;
-    
-    digitalWrite(m_pin, m_KmAv);
-    digitalWrite(m_pinAr, m_KmAr); 
+    //Pilotage de la sortie
+    digitalWrite(m_pin, cmd ^ m_inverted); 
+}
+
+
+
+
+/// @brief Contrôle moteur par signal TOR.
+/// Mettre cmdAv ou cmdAr à true .
+/// @param pinAv n° broche pour pilotage marche avant
+/// @param pinAr n° broche pour pilotage marche arrière
+/// @param inverted inversion des sorties logique ex : avec des relais
+Lctrl_MoteurTOR_2sens::Lctrl_MoteurTOR_2sens(byte pinAv, byte pinAr, bool inverted) :
+    cmdAv(false),
+    cmdAr(false),
+    m_pinAv(pinAv),
+    m_pinAr(pinAr),
+    m_inverted(inverted)
+    {        
+    }
+
+/// @brief Paramétrage initial du moteur
+/// Appeler dans la fonction modSetup()
+void Lctrl_MoteurTOR_2sens::setup(void)
+{
+    pinMode(m_pinAv, OUTPUT);
+    pinMode(m_pinAr, OUTPUT);
+}
+
+/// @brief Gestion de fonctionnement du moteur
+/// Appeler dans la fonction modMain()
+void Lctrl_MoteurTOR_2sens::main(void)
+{
+    //Pilotage de la sortie
+    digitalWrite(m_pinAv, (cmdAv && !cmdAr) ^ m_inverted);
+    digitalWrite(m_pinAr, (cmdAr && !cmdAv) ^ m_inverted);
 }
