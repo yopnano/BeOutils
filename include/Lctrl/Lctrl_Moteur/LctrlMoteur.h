@@ -10,7 +10,7 @@
 #define LctrlMoteurSeuilReprise 0
 #endif
 
-class LctrlMoteurCsg1cmd : /*public Lctrl, */ protected Lcmd_Rampe
+class LctrlMoteurCsg1cmd : protected Lcmd_Rampe
 {
 public:
     LctrlMoteurCsg1cmd(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
