@@ -92,7 +92,7 @@ void LctrlMoteurCsg2cmd::main(void)
     // le moteur reprenne dans l'autre sens dès que l'on atteint le m_min
     // il suffit d'ajouter "#define LctrlMoteurSeuilReprise 0" dans le fichier config
 
-    // Gestion sens de rotation &! à tester
+    // Gestion sens de rotation
     if (!m_val)
         m_arr = (!m_arr && cmdAr) || (m_arr && !cmdAv);
 

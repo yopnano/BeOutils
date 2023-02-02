@@ -40,7 +40,7 @@ public:
     LctrlMoteurCsg2cmd(unsigned short rampe_ms = 10, byte min = 0, byte max = 255);
 
     virtual void setup(void) = 0;
-    void main(void);
+    virtual void main(void);
 
     void pidMode(bool enable = true);
 

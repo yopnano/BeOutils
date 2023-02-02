@@ -10,6 +10,7 @@ public:
     LctrlStepper(byte pinStep, byte pinDir = -1, byte pinEnable = -1, unsigned short stepsRevolution = 200, unsigned short vMax = 1000, unsigned short rampe_ms = 0, byte min = 0, byte max = 255);
 
     void setup(void) override;
+    void main(void) override;
 
     void step(int nStep = 1);
     bool running(void) const;
