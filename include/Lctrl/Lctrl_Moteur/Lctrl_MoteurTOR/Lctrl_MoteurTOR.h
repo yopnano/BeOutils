@@ -34,7 +34,7 @@ public:
     void setup(void);
     void main(void);
 
-private:
+protected:
     byte m_pinAv;
     byte m_pinAr;
     bool m_inverted;

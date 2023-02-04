@@ -204,9 +204,9 @@ public:
     #include <Lctrl\Lctrl_Moteur\Lctrl_Servo\Lctrl_Servo.h>
 #endif
 
-#include <Lctrl\Lctrl_Moteur\Lctrl_DriveS500\Lctrl_DriveS500.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurPWM\Lctrl_MoteurPWM.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_MoteurTOR\Lctrl_MoteurTOR.h>
+#include <Lctrl\Lctrl_Moteur\Lctrl_Variateur\Lctrl_Variateur.h>
 #include <Lctrl\Lctrl_Moteur\Lctrl_Stepper\Lctrl_Stepper.h>
 
 #endif
