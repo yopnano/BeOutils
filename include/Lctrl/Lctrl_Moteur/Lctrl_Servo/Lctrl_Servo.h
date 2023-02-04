@@ -15,15 +15,15 @@ public:
 
     void setup(void) override;
 
-    void in(void) override;
-    void out(void) override;
-
     bool posAtteinte(void);
-
 
     // bool autoRelease; // Detachement du servo lorsque consigne atteinte
 
 private:
+
+    void in(void) override;
+    void out(void) override;
+
     byte m_pin; // Pin de sortie du signal pwm
 };
 #endif

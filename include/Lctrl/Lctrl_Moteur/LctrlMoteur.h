@@ -7,7 +7,7 @@
 #include <Lcmd\Lcmd_Rampe\Lcmd_Rampe.h>
 
 #ifndef LctrlMoteurSeuilReprise
-#define LctrlMoteurSeuilReprise 0
+    #define LctrlMoteurSeuilReprise 0
 #endif
 
 class LctrlMoteurCsg1cmd : protected Lcmd_Rampe
@@ -20,17 +20,15 @@ public:
 
     void pidMode(bool enable = true);
 
-
-
     bool cmd;   // Commande marche / arrêt moteur (True / False)
     byte rampe; // Rampe d'accélération / décélération. Temps en ms entre chaque maj de consigne
     byte csg;   // Consigne vitesse (0 - 255)
-    byte m_val;        // Valeur de pilotage
 
 protected:
     virtual void in(void);
     virtual void out(void) = 0;
 
+    byte m_val;        // Valeur de pilotage
     byte m_min, m_max; // Limite de consigne
 };
 

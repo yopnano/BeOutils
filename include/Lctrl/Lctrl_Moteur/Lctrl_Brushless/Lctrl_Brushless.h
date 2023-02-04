@@ -11,9 +11,10 @@ public:
     Lctrl_Brushless_1sens(byte pin, unsigned short rampe_ms = 30, byte min = 0, byte max = 255, unsigned short dtMin = 1000, unsigned short dtMax = 2000);
 
     void setup(void) override;
-    void out(void) override;
 
 private:
+    void out(void) override;
+    
     byte m_pin;
     unsigned short m_dtMin, m_dtMax;
 };
@@ -24,9 +25,10 @@ public:
     Lctrl_Brushless_2sens(byte pin, unsigned short rampe_ms = 30, byte min = 0, byte max = 255, unsigned short dtMin = 1000, unsigned short dtMid = 1500, unsigned short dtMax = 2000);
 
     void setup(void) override;
-    void out(void) override;
 
 private:
+    void out(void) override;
+    
     byte m_pin;
     unsigned short m_dtMin, m_dtMid, m_dtMax;
 };
