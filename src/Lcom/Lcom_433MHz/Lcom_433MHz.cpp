@@ -1,6 +1,6 @@
-#ifdef UsingLib_433MHz
+#include <Lcom\Lcom_433MHz\Lcom_433MHz.h>
 
-    #include <Lcom\Lcom_433MHz\Lcom_433MHz.h>
+#ifdef UsingLib_433MHz
 
     Lcom_RX_433MHz::Lcom_RX_433MHz(uint8_t pin) :
     m_pin(pin)

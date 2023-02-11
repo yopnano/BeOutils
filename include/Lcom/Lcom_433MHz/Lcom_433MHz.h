@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <RCSwitch.h>
+#include <Lcom\Lcom_IR\Lcom_IR.h>
 
 /*! @brief  Structure code 433 MHz.
         Structure contenant la valeur, la logueur de bit, et le protocole.
