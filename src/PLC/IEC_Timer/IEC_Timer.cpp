@@ -271,7 +271,7 @@ TP::TP(TIME pt, bool in): IN(in),
 void TP::main()
 {
     inTrig.Analyse(IN);
-    if (inTrig.R_trig())
+    if (inTrig.R_trig() && !q)
     {
         startMillis = millis();
         q = true;
