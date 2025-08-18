@@ -48,10 +48,10 @@ class TIME
         String toStringHMS();     
 
         uint32_t totalMillis() const {return (d * Jours) + (hh * Heures) + (mm * Minutes) + (ss * Secondes) + ms;}
-        uint16_t totalSecond();
-        uint16_t totalMinute();
-        uint16_t totalHour();
-        uint8_t totalDay();
+        uint16_t totalSecond() const {return totalMillis() / Secondes;}
+        uint16_t totalMinute() const {return totalMillis() / Minutes;}
+        uint16_t totalHour() const {return totalMillis() / Heures;}
+        uint8_t totalDay() const {return totalMillis() / Jours;}
 
         uint16_t millis() const {return ms;}
         uint8_t second() const {return ss;}
